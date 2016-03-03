@@ -79,7 +79,7 @@ namespace Lolli_Poppy
                 {
                     if(R.IsReady())
                     {
-                        if (R.IsCharging && sender.IsValidTarget(R.MinimumRange))
+                        if (R.IsFullyCharged && sender.IsValidTarget(R.Range))
                         {
                             var RPred = R.GetPrediction(sender);
 
@@ -87,16 +87,9 @@ namespace Lolli_Poppy
                             {
                                 R.Cast(RPred.UnitPosition);
                             }
-                        }
-
-                        if (R.IsFullyCharged && sender.IsValidTarget(R.MaximumRange))
+                        }else
                         {
-                            var RPred = R.GetPrediction(sender);
-
-                            if (RPred.HitChance >= HitChance.Medium)
-                            {
-                                R.Cast(RPred.UnitPosition);
-                            }
+                            R.StartCharging();
                         }
                     }
                 }
@@ -120,24 +113,6 @@ namespace Lolli_Poppy
         {
             if (Player.Instance.IsDead)
                 return;
-            
-            /*if(PoppyMenu.Keybind(PoppyMenu.Combo, "UseRComboKey"))
-            {
-                if(R.IsReady())
-                {
-                    var Target = TargetSelector.GetTarget(R.MinimumRange, DamageType.Mixed);
-
-                    if (Target.IsZombie && Target.IsDead && Target != null)
-                        return;
-
-                    var RPred = R.GetPrediction(Target);
-                    
-                    if(RPred.HitChance >= HitChance.Medium)
-                    {
-                        R.Cast(RPred.UnitPosition);
-                    }
-                }
-            }*/
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -157,11 +132,11 @@ namespace Lolli_Poppy
 
                         if (QPred.HitChance >= HitChance.High)
                         {
-                            Q.Cast(QPred.CastPosition);
+                            Q.Cast(QPred.UnitPosition);
                         }
                     }catch(Exception)
                     {
-                        Chat.Print("Error Combo: Skill Q");
+                        //Chat.Print("Error Combo: Skill Q");
                     }
                 }
 
@@ -178,7 +153,7 @@ namespace Lolli_Poppy
                     }
                     catch(Exception)
                     {
-                        Chat.Print("Error Combo: Skill E");
+                        //Chat.Print("Error Combo: Skill E");
                     }
                 }
 
@@ -202,7 +177,7 @@ namespace Lolli_Poppy
                         }
                     }catch(Exception)
                     {
-                        Chat.Print("Error Laneclear: Skill Q");
+                        //Chat.Print("Error Laneclear: Skill Q");
                     }
 
                 }
@@ -223,7 +198,7 @@ namespace Lolli_Poppy
                         Q.Cast(Minion);
                     }catch(Exception)
                     {
-                        Chat.Print("Error Jungle: Skill Q");
+                        //Chat.Print("Error Jungle: Skill Q");
                     }
                 }
 
@@ -235,7 +210,7 @@ namespace Lolli_Poppy
                     }
                     catch(Exception)
                     {
-                        Chat.Print("Error Jungle: Skill E");
+                        //Chat.Print("Error Jungle: Skill E");
                     }
                 }
             }

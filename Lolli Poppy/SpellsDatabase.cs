@@ -16,6 +16,24 @@ namespace Lolli_Poppy
             Spells.Add(
             new SpellsCheck
             {
+                Champion = Champion.MonkeyKing,
+                Name = "MonkeyKing",
+                SpellName = "",
+                SpellSlots = SpellSlot.E
+            });
+
+            Spells.Add(
+            new SpellsCheck
+            {
+                Champion = Champion.Nidalee,
+                Name = "Nidalee",
+                SpellName = "pounce",
+                SpellSlots = SpellSlot.W
+            });
+
+            Spells.Add(
+            new SpellsCheck
+            {
                 Champion = Champion.Amumu,
                 Name = "Amumu",
                 SpellName = "BandageToss",
@@ -223,10 +241,10 @@ namespace Lolli_Poppy
             Spells.Add(
             new SpellsCheck
             {
-                Champion = Champion.Malphite,
-                Name = "Malphite",
-                SpellName = "ufslash",
-                SpellSlots = SpellSlot.R
+                Champion = Champion.Caitlyn,
+                Name = "Caitlyn",
+                SpellName = "CaitlynEntrapment",
+                SpellSlots = SpellSlot.E
             });
 
             Spells.Add(
@@ -316,6 +334,15 @@ namespace Lolli_Poppy
                 Name = "XinZhao",
                 SpellName = "xenzhaosweep",
                 SpellSlots = SpellSlot.E
+            });
+
+            Spells.Add(
+            new SpellsCheck
+            {
+                Champion = Champion.Nautilus,
+                Name = "Nautilus",
+                SpellName = "NautilusAnchorDrag",
+                SpellSlots = SpellSlot.Q
             });
 
             Spells.Add(

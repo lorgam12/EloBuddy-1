@@ -28,7 +28,7 @@ namespace Lolli_Poppy
             Combo.Add("UseECombo", new CheckBox("Use E"));
             Combo.Add("UseRCombo", new CheckBox("Use R"));
             Combo.AddSeparator(2);
-            //Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.PressToggle, 'T'));
+            //Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.HoldActive, 'T'));
 
             Laneclear = Principal.AddSubMenu("Laneclear", "Laneclear");
             Laneclear.Add("UseQLane", new CheckBox("Use Q"));
