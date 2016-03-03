@@ -5,13 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using EloBuddy;
 using EloBuddy.SDK;
-using EloBuddy.SDK.Events;
-using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using System.Reflection;
-using EloBuddy.SDK.Rendering;
-using SharpDX;
 
 namespace Lolli_Poppy
 {
@@ -32,7 +28,7 @@ namespace Lolli_Poppy
             Combo.Add("UseECombo", new CheckBox("Use E"));
             Combo.Add("UseRCombo", new CheckBox("Use R"));
             Combo.AddSeparator(2);
-            Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.PressToggle, 'T'));
+            //Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.PressToggle, 'T'));
 
             Laneclear = Principal.AddSubMenu("Laneclear", "Laneclear");
             Laneclear.Add("UseQLane", new CheckBox("Use Q"));

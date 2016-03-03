@@ -7,10 +7,6 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Enumerations;
-using EloBuddy.SDK.Menu;
-using EloBuddy.SDK.Menu.Values;
-using EloBuddy.SDK.Rendering;
-using SharpDX;
 
 namespace Lolli_Poppy
 {
@@ -125,7 +121,7 @@ namespace Lolli_Poppy
             if (Player.Instance.IsDead)
                 return;
             
-            if(PoppyMenu.Keybind(PoppyMenu.Combo, "UseRComboKey"))
+            /*if(PoppyMenu.Keybind(PoppyMenu.Combo, "UseRComboKey"))
             {
                 if(R.IsReady())
                 {
@@ -141,7 +137,7 @@ namespace Lolli_Poppy
                         R.Cast(RPred.UnitPosition);
                     }
                 }
-            }
+            }*/
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -161,7 +157,7 @@ namespace Lolli_Poppy
 
                         if (QPred.HitChance >= HitChance.High)
                         {
-                            Q.Cast(QPred.Unitposition);
+                            Q.Cast(QPred.CastPosition);
                         }
                     }catch(Exception)
                     {

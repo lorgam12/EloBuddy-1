@@ -9,3 +9,6 @@ C:\Users\Lawiet\Desktop\Projetos\Lolli Poppy\Lolli Poppy\bin\Debug\SharpDX.Direc
 C:\Users\Lawiet\Desktop\Projetos\Lolli Poppy\Lolli Poppy\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Lawiet\Desktop\Projetos\Lolli Poppy\Lolli Poppy\obj\Debug\Lolli Poppy.exe
 C:\Users\Lawiet\Desktop\Projetos\Lolli Poppy\Lolli Poppy\obj\Debug\Lolli Poppy.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Lolli Poppy\bin\Debug\Lolli Poppy.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Lolli Poppy\obj\Debug\Lolli Poppy.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Lolli Poppy\obj\Debug\Lolli Poppy.pdb
