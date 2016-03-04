@@ -20,13 +20,14 @@ namespace Lolli_Poppy
             Principal = MainMenu.AddMenu("Lolli Poppy", "Poppy");
             Principal.AddLabel("Lolli Poppy v" + Assembly.GetExecutingAssembly().GetName().Version);
             Principal.AddSeparator(2);
+            Principal.AddLabel("- Fixed random ults for no reason");
             Principal.AddLabel("Good game !");
 
             Combo = Principal.AddSubMenu("Combo", "Combo");
             Combo.Add("UseQCombo", new CheckBox("Use Q"));
             Combo.Add("UseWCombo", new CheckBox("Use W"));
             Combo.Add("UseECombo", new CheckBox("Use E"));
-            Combo.Add("UseRCombo", new CheckBox("Use R"));
+            //Combo.Add("UseRCombo", new CheckBox("Use R"));
             Combo.AddSeparator(2);
             //Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.HoldActive, 'T'));
 

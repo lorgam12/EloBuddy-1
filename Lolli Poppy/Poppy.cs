@@ -75,23 +75,6 @@ namespace Lolli_Poppy
                 if(E.IsReady() && sender.IsValidTarget(E.Range))
                 {
                     E.Cast(sender);
-                }else
-                {
-                    if(R.IsReady())
-                    {
-                        if (R.IsFullyCharged && sender.IsValidTarget(R.Range))
-                        {
-                            var RPred = R.GetPrediction(sender);
-
-                            if(RPred.HitChance >= HitChance.Medium)
-                            {
-                                R.Cast(RPred.UnitPosition);
-                            }
-                        }else
-                        {
-                            R.StartCharging();
-                        }
-                    }
                 }
             }
         }
