@@ -13,23 +13,32 @@ namespace Lolli_Poppy
 {
     class PoppyMenu
     {
-        public static Menu Principal, Combo, Laneclear, Jungleclear, Flee, Misc, Spells, Draw;
+        public static Menu Principal, Combo, Laneclear, Jungleclear, Flee, Misc, Spells, Draw, Killsteal, Beta;
 
         public static void Load()
         {
             Principal = MainMenu.AddMenu("Lolli Poppy", "Poppy");
             Principal.AddLabel("Lolli Poppy v" + Assembly.GetExecutingAssembly().GetName().Version);
             Principal.AddSeparator(2);
-            Principal.AddLabel("- Fixed random ults for no reason");
             Principal.AddLabel("Good game !");
+
+            Beta = Principal.AddSubMenu("Beta", "Beta");
+            Beta.Add("Beta", new CheckBox("Beta?", false));
+            Beta.Add("AutoRCombo", new CheckBox("Auto R"));
+            Beta.AddLabel("Auto R = If you are in danger");
+            Beta.Add("AutoRComboHealth", new Slider("Auto R if your HP is below {0} %", 25, 10, 40));
+            Beta.Add("AutoRComboEnemy", new Slider("Auto R if you {0} enemies in the range of R", 2, 1, 5));
+            Beta.AddSeparator(2);
+            Beta.Add("BetaECombo", new CheckBox("New logic to the skill E"));
+            Beta.Add("BetaRCombo", new CheckBox("Use R"));
+            Beta.Add("BetaRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.HoldActive, 'T'));
+            Beta.AddSeparator(2);
+            Beta.Add("BetaInterrupter", new CheckBox("Interrupter using R and E"));
 
             Combo = Principal.AddSubMenu("Combo", "Combo");
             Combo.Add("UseQCombo", new CheckBox("Use Q"));
             Combo.Add("UseWCombo", new CheckBox("Use W"));
             Combo.Add("UseECombo", new CheckBox("Use E"));
-            //Combo.Add("UseRCombo", new CheckBox("Use R"));
-            Combo.AddSeparator(2);
-            //Combo.Add("UseRComboKey", new KeyBind("Press Key To use R", false, KeyBind.BindTypes.HoldActive, 'T'));
 
             Laneclear = Principal.AddSubMenu("Laneclear", "Laneclear");
             Laneclear.Add("UseQLane", new CheckBox("Use Q"));
@@ -67,7 +76,7 @@ namespace Lolli_Poppy
             Draw.Add("DrawQ", new CheckBox("Draw Q"));
             Draw.Add("DrawW", new CheckBox("Draw W"));
             Draw.Add("DrawE", new CheckBox("Draw E"));
-            Draw.Add("DrawR", new CheckBox("Draw R"));
+            Draw.Add("DrawR", new CheckBox("Draw R min and max range"));
         }
 
         public static bool CheckBox(Menu m, string s)

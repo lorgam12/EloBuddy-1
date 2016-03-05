@@ -13,11 +13,6 @@ namespace Lolli_Poppy
 {
     class Program
     {
-        private const float BarLength = 109;
-        private const float XOffset = 2;
-        private const float YOffset = 9;
-        public float CheckDistance = 1200;
-
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
@@ -38,7 +33,7 @@ namespace Lolli_Poppy
             if (Player.Instance.IsDead)
                 return;
 
-            if(Poppy.Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawQ"))
+            if (Poppy.Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawQ"))
             {
                 Circle.Draw(Color.Yellow, Poppy.Q.Range, Player.Instance.Position);
             }
@@ -55,7 +50,12 @@ namespace Lolli_Poppy
 
             if (Poppy.R.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawR"))
             {
-                Circle.Draw(Color.Green, Poppy.R.Range, Player.Instance.Position);
+                Circle.Draw(Color.Green, Poppy.R.MinimumRange, Player.Instance.Position);
+            }
+
+            if (Poppy.R.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawR"))
+            {
+                Circle.Draw(Color.Green, Poppy.R.MaximumRange, Player.Instance.Position);
             }
         }
     }

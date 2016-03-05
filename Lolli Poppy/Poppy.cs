@@ -33,7 +33,7 @@ namespace Lolli_Poppy
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsEnemy && sender.IsDead && sender.IsZombie && sender == null)
+            if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
                 return;
 
             if(W.IsReady() && (W.IsInRange(args.End) || W.IsInRange(args.Start)))
@@ -67,14 +67,33 @@ namespace Lolli_Poppy
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if (!sender.IsEnemy && sender.IsDead && sender.IsZombie && sender == null)
+            if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
                 return;
 
             if (PoppyMenu.CheckBox(PoppyMenu.Misc, "Interrupter"))
             {
-                if(E.IsReady() && sender.IsValidTarget(E.Range))
+                if (E.IsReady() && sender.IsValidTarget(E.Range))
                 {
                     E.Cast(sender);
+                }
+            }
+
+            if (PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta") && PoppyMenu.CheckBox(PoppyMenu.Beta, "BetaInterrupter"))
+            {
+                if (e.DangerLevel == DangerLevel.High)
+                {
+                    if (sender.IsValidTarget(R.MaximumRange))
+                    {
+                        if (R.StartCharging())
+                        {
+                            var RPred = R.GetPrediction(sender);
+
+                            if (RPred.HitChance >= HitChance.High)
+                            {
+                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, false);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -84,18 +103,93 @@ namespace Lolli_Poppy
             if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
                 return;
 
-            var Position = sender.BoundingRadius + sender.Position.Extend(ObjectManager.Player.Position, -360);
+            var Position = sender.BoundingRadius + sender.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -360);
 
-            if(Position.IsWall() && sender.IsValidTarget(E.Range))
+            if (Position.IsWall())
             {
-                E.Cast(sender.Position);
+                E.Cast(sender);
             }
+        }
+
+        private static bool CheckWall(Obj_AI_Base t)
+        {
+            var Distance = t.BoundingRadius + t.ServerPosition.Extend(Player.Instance.ServerPosition, -355);
+
+            if(Distance.IsWall())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void Game_OnTick(EventArgs args)
         {
             if (Player.Instance.IsDead)
                 return;
+
+            if (PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta"))
+            {
+                if(PoppyMenu.Keybind(PoppyMenu.Beta, "BetaRComboKey"))
+                {
+                    var T = TargetSelector.GetTarget(R.MinimumRange, DamageType.Mixed);
+
+                    if (T == null && T.IsDead && T.IsZombie)
+                        return;
+
+                    if(T.IsValidTarget(R.MinimumRange))
+                    {
+                        if(R.StartCharging())
+                        {   
+                            var RPred = R.GetPrediction(T);
+
+                            if(RPred.HitChance >= HitChance.High)
+                            {
+                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, T.ServerPosition, true);
+                            }
+                        }
+                    }
+                }
+
+                if(PoppyMenu.CheckBox(PoppyMenu.Beta, "AutoRCombo") && R.IsReady() && Player.Instance.CountEnemiesInRange(R.Range) >= PoppyMenu.Slider(PoppyMenu.Beta, "AutoRComboEnemy"))
+                {
+                    if (Player.Instance.HealthPercent >= PoppyMenu.Slider(PoppyMenu.Beta, "AutoRComboHealth"))
+                    {
+                        var T = EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget() && !x.IsDead && !x.IsZombie).FirstOrDefault();
+
+                        if (T == null)
+                            return;
+
+                        if (T.IsValidTarget(R.MinimumRange))
+                        {
+                            var RPred = R.GetPrediction(T);
+
+                            if (RPred.HitChance >= HitChance.High)
+                            {
+                                if (R.StartCharging())
+                                {
+                                    Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
+                                }
+                            }
+                        }else
+                        if (T.IsValidTarget(R.MaximumRange))
+                        {
+                            var RPred = R.GetPrediction(T);
+
+                            if (RPred.HitChance >= HitChance.High)
+                            {
+                                if (R.StartCharging())
+                                {
+                                    if (R.IsCharging)
+                                    {
+                                        R.Cast(RPred.UnitPosition);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -123,15 +217,27 @@ namespace Lolli_Poppy
                     }
                 }
 
-                if(E.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Combo, "UseECombo"))
+                if(E.IsReady())
                 {
                     try
                     {
-                        var Position = ETarget.BoundingRadius + ETarget.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -360);
-
-                        if (Position.IsWall())
+                        if(PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta") && PoppyMenu.CheckBox(PoppyMenu.Beta, "BetaECombo"))
                         {
-                            E.Cast(ETarget);
+                            if (CheckWall(ETarget))
+                            {
+                                E.Cast(ETarget);
+                            }
+                        }else
+                        {
+                            if (PoppyMenu.CheckBox(PoppyMenu.Combo, "UseECombo"))
+                            {
+                                var Position = ETarget.BoundingRadius + ETarget.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -360);
+
+                                if (Position.IsWall())
+                                {
+                                    E.Cast(ETarget);
+                                }
+                            }
                         }
                     }
                     catch(Exception)
