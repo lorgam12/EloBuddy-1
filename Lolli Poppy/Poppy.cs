@@ -31,6 +31,30 @@ namespace Lolli_Poppy
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
+        /*
+        public static float GetTotalDamage(Obj_AI_Base T)
+        {
+            var DMG = Player.Instance.GetAutoAttackDamage(T);
+
+            if(Q.IsReady())
+            {
+                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.Q);
+            }
+
+            if(E.IsReady())
+            {
+                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.E);
+            }
+
+            if(R.IsReady())
+            {
+                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.R);
+            }
+
+            return DMG;
+        }
+        */
+
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)

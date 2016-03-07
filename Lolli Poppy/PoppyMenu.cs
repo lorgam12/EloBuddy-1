@@ -77,6 +77,8 @@ namespace Lolli_Poppy
             Draw.Add("DrawW", new CheckBox("Draw W"));
             Draw.Add("DrawE", new CheckBox("Draw E"));
             Draw.Add("DrawR", new CheckBox("Draw R min and max range"));
+            Draw.Add("DrawP", new CheckBox("Draw Passive"));
+            //Draw.Add("DrawDMG", new CheckBox("Draw Combo Damage"));
         }
 
         public static bool CheckBox(Menu m, string s)

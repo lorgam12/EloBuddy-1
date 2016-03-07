@@ -13,6 +13,8 @@ namespace Lolli_Poppy
 {
     class Program
     {
+        private static GameObject Passiva = null;
+
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
@@ -25,13 +27,53 @@ namespace Lolli_Poppy
 
             PoppyMenu.Load();
             Poppy.Load();
+            //DamageIndicator.Initialize(Poppy.GetTotalDamage);
             Drawing.OnDraw += Drawing_OnDraw;
+            GameObject.OnCreate += GameObject_OnCreate;
+            GameObject.OnDelete += GameObject_OnDelete;
+            Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffGain;
+        }
+
+        private static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
+        {
+            if(sender.HasBuff("poppypassiveshield"))
+            {
+                Passiva = null;
+            }
+        }
+
+        private static void GameObject_OnDelete(GameObject sender, EventArgs args)
+        {
+            if(sender.IsAlly)
+            {
+                if(sender.Name.ToLower() == "shield")
+                {
+                    Passiva = null;
+                }
+            }
+        }
+
+        private static void GameObject_OnCreate(GameObject sender, EventArgs args)
+        {
+            if(sender.IsAlly)
+            {
+                if(sender.Name.ToLower() == "shield")
+                {
+                    Passiva = sender;
+                }
+            }
         }
 
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (Player.Instance.IsDead)
                 return;
+
+            if(PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawP") && Passiva != null)
+            {
+                Circle.Draw(Color.Red, 60, Passiva.Position);
+                Line.DrawLine(System.Drawing.Color.Red, Passiva.Position, Player.Instance.Position);
+            }
 
             if (Poppy.Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawQ"))
             {
