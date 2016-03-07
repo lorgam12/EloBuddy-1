@@ -37,24 +37,39 @@ namespace Lolli_Poppy
 
         public static float GetTotalDamage(Obj_AI_Base T)
         {
-            var DMG = Player.Instance.GetAutoAttackDamage(T);
+            float Damage = Player.Instance.GetAutoAttackDamage(T);
 
-            if(Q.IsReady())
+            if (Q.IsReady())
             {
-                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.Q);
+                Damage += QDMG(T);
             }
 
-            if(E.IsReady())
+            if (E.IsReady())
             {
-                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.E);
+                Damage += EDMG(T);
             }
 
-            if(R.IsReady())
+            if (R.IsReady())
             {
-                DMG += Player.Instance.GetSpellDamage(T, SpellSlot.R);
+                Damage += RDMG(T);
             }
 
-            return DMG;
+            return Damage;
+        }
+
+        public static float QDMG(Obj_AI_Base T)
+        {
+            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 40, 65, 90, 115, 140 }[Q.Level] + 0.80f * Player.Instance.TotalAttackDamage + 0.06f * T.MaxHealth);
+        }
+
+        public static float EDMG(Obj_AI_Base T)
+        {
+            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Magical, new float[] { 50, 70, 90, 110, 130 }[E.Level] + 0.5f * Player.Instance.TotalMagicalDamage);
+        }
+
+        public static float RDMG(Obj_AI_Base T)
+        {
+            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 200, 300, 400 }[R.Level] + 0.9f * Player.Instance.TotalAttackDamage);
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -108,16 +123,30 @@ namespace Lolli_Poppy
             {
                 if (e.DangerLevel == DangerLevel.High)
                 {
-                    if (sender.IsValidTarget(R.MinimumRange) && !E.IsReady())
+                    if (!E.IsReady() && R.IsReady())
                     {
                         var RPred = R.GetPrediction(sender);
 
-                        if (RPred.HitChance <= HitChance.Medium)
+                        if (sender.IsValidTarget(R.MinimumRange) && RPred.HitChance <= HitChance.Medium)
                         {
                             if (R.StartCharging())
                             {
                                 Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
                             }
+                        }
+                    }
+
+                    if(!R.IsCharging && !E.IsReady() && R.IsReady())
+                    {
+                        R.StartCharging();
+                    }
+                    else if (R.Range == R.MaximumRange)
+                    {
+                        var RPred = R.GetPrediction(sender);
+
+                        if(RPred.HitChance >= HitChance.High)
+                        {
+                            R.Cast(RPred.UnitPosition);
                         }
                     }
                 }
@@ -154,19 +183,20 @@ namespace Lolli_Poppy
 
             if(PoppyMenu.Keybind(PoppyMenu.Combo, "UseRComboKey"))
             {
-                if(TargetUlt.IsValidTarget(R.MinimumRange))
-                {
-                    if(R.IsReady())
-                    {
-                        if(R.StartCharging())
-                        {
-                            var RPred = R.GetPrediction(TargetUlt);
+                if (TargetUlt == null)
+                    return;
 
-                            if (RPred.HitChance <= HitChance.High && R.IsCharging)
-                            {
-                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
-                            }
-                        }
+                if (!R.IsCharging && R.IsReady() && TargetUlt.IsValidTarget(R.MaximumRange))
+                {
+                    R.StartCharging();
+                }
+                else if(R.IsReady() && R.Range == R.MaximumRange)
+                {
+                    var RPred = R.GetPrediction(TargetUlt);
+
+                    if(RPred.HitChance >= HitChance.High)
+                    {
+                        R.Cast(RPred.UnitPosition);
                     }
                 }
             }
@@ -181,6 +211,9 @@ namespace Lolli_Poppy
                 {
                     try
                     {
+                        if (RTarget == null)
+                            return;
+
                         var RPred = R.GetPrediction(RTarget);
 
                         if(RPred.HitChance <= HitChance.Medium)
@@ -202,6 +235,9 @@ namespace Lolli_Poppy
                 {
                     try
                     {
+                        if (QTarget == null)
+                            return;
+
                         var QPred = Q.GetPrediction(QTarget);
 
                         if (QPred.HitChance >= HitChance.High)
@@ -218,6 +254,9 @@ namespace Lolli_Poppy
                 {
                     try
                     {
+                        if (ETarget == null)
+                            return;
+
                         if(PoppyMenu.CheckBox(PoppyMenu.Combo, "UseECombo"))
                         {
                             if (CheckWall(ETarget))
