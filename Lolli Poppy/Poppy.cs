@@ -7,6 +7,8 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Enumerations;
+using EloBuddy.SDK.Rendering;
+using SharpDX;
 
 namespace Lolli_Poppy
 {
@@ -16,6 +18,7 @@ namespace Lolli_Poppy
         public static Spell.Active W;
         public static Spell.Targeted E;
         public static Spell.Chargeable R;
+        public static AIHeroClient TargetUlt;
 
         public static void Load()
         {
@@ -29,9 +32,9 @@ namespace Lolli_Poppy
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            DamageIndicator.Initialize(GetTotalDamage);
         }
 
-        /*
         public static float GetTotalDamage(Obj_AI_Base T)
         {
             var DMG = Player.Instance.GetAutoAttackDamage(T);
@@ -53,7 +56,6 @@ namespace Lolli_Poppy
 
             return DMG;
         }
-        */
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -102,19 +104,19 @@ namespace Lolli_Poppy
                 }
             }
 
-            if (PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta") && PoppyMenu.CheckBox(PoppyMenu.Beta, "BetaInterrupter"))
+            if (PoppyMenu.CheckBox(PoppyMenu.Misc, "Interrupter"))
             {
                 if (e.DangerLevel == DangerLevel.High)
                 {
-                    if (sender.IsValidTarget(R.MaximumRange))
+                    if (sender.IsValidTarget(R.MinimumRange) && !E.IsReady())
                     {
-                        if (R.StartCharging())
-                        {
-                            var RPred = R.GetPrediction(sender);
+                        var RPred = R.GetPrediction(sender);
 
-                            if (RPred.HitChance >= HitChance.High)
+                        if (RPred.HitChance <= HitChance.Medium)
+                        {
+                            if (R.StartCharging())
                             {
-                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, false);
+                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
                             }
                         }
                     }
@@ -127,9 +129,7 @@ namespace Lolli_Poppy
             if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
                 return;
 
-            var Position = sender.BoundingRadius + sender.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -360);
-
-            if (Position.IsWall())
+            if (CheckWall(sender))
             {
                 E.Cast(sender);
             }
@@ -152,63 +152,19 @@ namespace Lolli_Poppy
             if (Player.Instance.IsDead)
                 return;
 
-            if (PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta"))
+            if(PoppyMenu.Keybind(PoppyMenu.Combo, "UseRComboKey"))
             {
-                if(PoppyMenu.Keybind(PoppyMenu.Beta, "BetaRComboKey"))
+                if(TargetUlt.IsValidTarget(R.MinimumRange))
                 {
-                    var T = TargetSelector.GetTarget(R.MinimumRange, DamageType.Mixed);
-
-                    if (T == null && T.IsDead && T.IsZombie)
-                        return;
-
-                    if(T.IsValidTarget(R.MinimumRange))
+                    if(R.IsReady())
                     {
                         if(R.StartCharging())
-                        {   
-                            var RPred = R.GetPrediction(T);
-
-                            if(RPred.HitChance >= HitChance.High)
-                            {
-                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, T.ServerPosition, true);
-                            }
-                        }
-                    }
-                }
-
-                if(PoppyMenu.CheckBox(PoppyMenu.Beta, "AutoRCombo") && R.IsReady() && Player.Instance.CountEnemiesInRange(R.Range) >= PoppyMenu.Slider(PoppyMenu.Beta, "AutoRComboEnemy"))
-                {
-                    if (Player.Instance.HealthPercent >= PoppyMenu.Slider(PoppyMenu.Beta, "AutoRComboHealth"))
-                    {
-                        var T = EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget() && !x.IsDead && !x.IsZombie).FirstOrDefault();
-
-                        if (T == null)
-                            return;
-
-                        if (T.IsValidTarget(R.MinimumRange))
                         {
-                            var RPred = R.GetPrediction(T);
+                            var RPred = R.GetPrediction(TargetUlt);
 
-                            if (RPred.HitChance >= HitChance.High)
+                            if (RPred.HitChance <= HitChance.High && R.IsCharging)
                             {
-                                if (R.StartCharging())
-                                {
-                                    Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
-                                }
-                            }
-                        }else
-                        if (T.IsValidTarget(R.MaximumRange))
-                        {
-                            var RPred = R.GetPrediction(T);
-
-                            if (RPred.HitChance >= HitChance.High)
-                            {
-                                if (R.StartCharging())
-                                {
-                                    if (R.IsCharging)
-                                    {
-                                        R.Cast(RPred.UnitPosition);
-                                    }
-                                }
+                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
                             }
                         }
                     }
@@ -217,15 +173,32 @@ namespace Lolli_Poppy
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                var Check = TargetSelector.GetTarget(R.Range, DamageType.Mixed);
+                var QTarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+                var ETarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                var RTarget = TargetSelector.GetTarget(R.MinimumRange, DamageType.Physical);
 
-                if (Check == null)
-                    return;
+                if(R.IsReady() && RTarget.IsValidTarget(R.MinimumRange))
+                {
+                    try
+                    {
+                        var RPred = R.GetPrediction(RTarget);
 
-                var QTarget = TargetSelector.GetTarget(Q.Range, DamageType.Mixed);
-                var ETarget = TargetSelector.GetTarget(E.Range, DamageType.Mixed);
+                        if(RPred.HitChance <= HitChance.Medium)
+                        {
+                            if (R.StartCharging())
+                            {
+                                Player.Instance.Spellbook.UpdateChargeableSpell(SpellSlot.R, RPred.UnitPosition, true);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //Chat.Print("Error Combo: Skill R");
+                    }
+                }
 
-                if (Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Combo, "UseQCombo"))
+
+                if (Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Combo, "UseQCombo") && QTarget.IsValidTarget(Q.Range))
                 {
                     try
                     {
@@ -241,26 +214,15 @@ namespace Lolli_Poppy
                     }
                 }
 
-                if(E.IsReady())
+                if(E.IsReady() && ETarget.IsValidTarget(E.Range))
                 {
                     try
                     {
-                        if(PoppyMenu.CheckBox(PoppyMenu.Beta, "Beta") && PoppyMenu.CheckBox(PoppyMenu.Beta, "BetaECombo"))
+                        if(PoppyMenu.CheckBox(PoppyMenu.Combo, "UseECombo"))
                         {
                             if (CheckWall(ETarget))
                             {
                                 E.Cast(ETarget);
-                            }
-                        }else
-                        {
-                            if (PoppyMenu.CheckBox(PoppyMenu.Combo, "UseECombo"))
-                            {
-                                var Position = ETarget.BoundingRadius + ETarget.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -360);
-
-                                if (Position.IsWall())
-                                {
-                                    E.Cast(ETarget);
-                                }
                             }
                         }
                     }
@@ -274,7 +236,7 @@ namespace Lolli_Poppy
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
-                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => !x.IsDead && x.IsValidTarget(Q.Range));
+                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => !x.IsDead && x.IsValidTarget(Q.Range) && x.Health <= 0);
                 var Minions = EntityManager.MinionsAndMonsters.GetLineFarmLocation(Minion, Q.Width, (int) Q.Range);
 
                 if (Minion == null)

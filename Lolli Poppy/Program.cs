@@ -27,11 +27,25 @@ namespace Lolli_Poppy
 
             PoppyMenu.Load();
             Poppy.Load();
-            //DamageIndicator.Initialize(Poppy.GetTotalDamage);
             Drawing.OnDraw += Drawing_OnDraw;
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffGain;
+            Game.OnWndProc += Game_OnWndProc;
+            Chat.Print("Teste v0.1");
+        }
+
+        private static void Game_OnWndProc(WndEventArgs args)
+        {
+            if(args.Msg == (uint)WindowMessages.LeftButtonDown)
+            {
+                var T = TargetSelector.GetTarget(200f, DamageType.Physical, Game.CursorPos);
+
+                if(T.IsValidTarget())
+                {
+                    Poppy.TargetUlt = T;
+                }
+            }
         }
 
         private static void Obj_AI_Base_OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
@@ -68,6 +82,11 @@ namespace Lolli_Poppy
         {
             if (Player.Instance.IsDead)
                 return;
+
+            if(PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawTarget") && Poppy.TargetUlt != null)
+            {
+                Circle.Draw(Color.Yellow, 120, Poppy.TargetUlt.Position);
+            }
 
             if(PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawP") && Passiva != null)
             {

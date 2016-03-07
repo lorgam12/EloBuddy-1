@@ -1,92 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EloBuddy;
+using EloBuddy.SDK;
+using SharpDX;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lolli_Poppy
 {
-    using System;
-    using System.Linq;
-
-    using EloBuddy;
-    using EloBuddy.SDK;
-    using EloBuddy.SDK.Rendering;
-
-    using SharpDX;
-
+    using EloBuddy.SDK.Menu;
+    using EloBuddy.SDK.Menu.Values;
     using Color = System.Drawing.Color;
 
     public static class DamageIndicator
     {
-        private const int BarWidth = 104;
+        private const int BarWidth = 106;
+        private const int LineThickness = 10;
 
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
-
         private static DamageToUnitDelegate DamageToUnit { get; set; }
 
-        private static readonly Vector2 BarOffset = new Vector2(-9, 11);
+        private static Vector2 BarOffset = new Vector2(0, 16);
 
-        private static Color drawingColor;
-
+        private static Color _drawingColor;
         public static Color DrawingColor
         {
-            get
-            {
-                return drawingColor;
-            }
-            set
-            {
-                drawingColor = Color.FromArgb(170, value);
-            }
+            get { return _drawingColor; }
+            set { _drawingColor = Color.FromArgb(170, value); }
         }
 
         public static bool HealthbarEnabled { get; set; }
-
         public static bool PercentEnabled { get; set; }
 
         public static void Initialize(DamageToUnitDelegate damageToUnit)
         {
+            // Apply needed field delegate for damage calculation
             DamageToUnit = damageToUnit;
-            HealthbarEnabled = PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawDMG");
 
+            DrawingColor = Color.Yellow;
+            HealthbarEnabled = PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawDMG");
+            PercentEnabled = PoppyMenu.CheckBox(PoppyMenu.Draw, "DrawDMG");
+            /*
+            DrawingColor = Settings.colorHealth;
+            HealthbarEnabled = Settings.DrawHealth;
+             */
+
+            // Register event handlers
             Drawing.OnEndScene += OnEndScene;
         }
 
         private static void OnEndScene(EventArgs args)
         {
-            if (!HealthbarEnabled && !PercentEnabled) { return; }
-
-            foreach (var unit in EntityManager.Heroes.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
+            // Idk who made this but i copypasted from Owlyze (iRaxe)
+            if (HealthbarEnabled || PercentEnabled)
             {
-                var damage = DamageToUnit(unit);
-
-                if (damage <= 0)
+                foreach (var unit in EntityManager.Heroes.Enemies.Where(u => u.IsHPBarRendered))
                 {
-                    continue;
-                }
+                    // Get damage to unit
+                    var damage = DamageToUnit(unit);
 
-                if (HealthbarEnabled)
-                {
-                    var pos = new Vector2(unit.HPBarPosition.X + 2, unit.HPBarPosition.Y + 9);
-                    var fullbar = BarWidth * (unit.HealthPercent / 100);
-                    damage = BarWidth
-                             * (unit.TotalShieldHealth() - damage > 0 ? unit.TotalShieldHealth() - damage : 0)
-                             / (unit.MaxHealth + unit.AllShield + unit.AttackShield + unit.MagicShield);
-                    Line.DrawLine(
-                        DrawingColor,
-                        9f,
-                        new Vector2(pos.X, pos.Y),
-                        new Vector2(pos.X + (damage > fullbar ? fullbar : damage), pos.Y));
-                }
+                    // Continue on 0 damage
+                    if (damage <= 0)
+                    {
+                        continue;
+                    }
 
-                if (PercentEnabled)
-                {
-                    Drawing.DrawText(
-                        unit.HPBarPosition,
-                        Color.MediumVioletRed,
-                        string.Concat(Math.Ceiling(damage / unit.TotalShieldHealth() * 100), "%"),
-                        10);
+                    if (HealthbarEnabled)
+                    {
+                        // Get remaining HP after damage applied in percent and the current percent of health
+                        var damagePercentage = ((unit.TotalShieldHealth() - damage) > 0 ? (unit.TotalShieldHealth() - damage) : 0) /
+                                               (unit.MaxHealth + unit.AllShield + unit.AttackShield + unit.MagicShield);
+                        var currentHealthPercentage = unit.TotalShieldHealth() / (unit.MaxHealth + unit.AllShield + unit.AttackShield + unit.MagicShield);
+
+                        // Calculate start and end point of the bar indicator
+                        var startPoint = new Vector2((int)(unit.HPBarPosition.X + BarOffset.X + damagePercentage * BarWidth), (int)(unit.HPBarPosition.Y + BarOffset.Y) - 5);
+                        var endPoint = new Vector2((int)(unit.HPBarPosition.X + BarOffset.X + currentHealthPercentage * BarWidth) + 1, (int)(unit.HPBarPosition.Y + BarOffset.Y) - 5);
+
+                        // Draw the line
+                        Drawing.DrawLine(startPoint, endPoint, LineThickness, DrawingColor);
+                    }
+
+                    if (PercentEnabled)
+                    {
+                        // Get damage in percent and draw next to the health bar
+                        Drawing.DrawText(new Vector2(unit.HPBarPosition.X, unit.HPBarPosition.Y + 20), Color.Yellow, string.Concat(Math.Ceiling((damage / unit.TotalShieldHealth()) * 100), "%"), 10);
+                    }
                 }
             }
         }
