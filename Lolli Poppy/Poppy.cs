@@ -37,7 +37,7 @@ namespace Lolli_Poppy
 
         public static float GetTotalDamage(Obj_AI_Base T)
         {
-            float Damage = Player.Instance.GetAutoAttackDamage(T);
+            float Damage = 0f;
 
             if (Q.IsReady())
             {

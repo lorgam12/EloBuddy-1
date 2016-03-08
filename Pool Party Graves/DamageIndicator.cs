@@ -35,8 +35,8 @@ namespace Pool_Party_Graves
             // Apply needed field delegate for damage calculation
             DamageToUnit = damageToUnit;
 
-            DrawingColor = Color.Yellow;
-            HealthbarEnabled = GravesMenu.Draw["DrawDMG"].Cast<CheckBox>().CurrentValue;
+            DrawingColor = Color.Orange;
+            HealthbarEnabled = GravesMenu.CheckBox(GravesMenu.Draw, "DrawDMG");
             PercentEnabled = true;
             /*
             DrawingColor = Settings.colorHealth;
@@ -81,7 +81,7 @@ namespace Pool_Party_Graves
                     if (PercentEnabled)
                     {
                         // Get damage in percent and draw next to the health bar
-                        Drawing.DrawText(new Vector2(unit.HPBarPosition.X, unit.HPBarPosition.Y + 20), Color.Yellow, string.Concat(Math.Ceiling((damage / unit.TotalShieldHealth()) * 100), "%"), 10);
+                        Drawing.DrawText(new Vector2(unit.HPBarPosition.X, unit.HPBarPosition.Y + 20), Color.Orange, string.Concat(Math.Ceiling((damage / unit.TotalShieldHealth()) * 100), "%"), 10);
                     }
                 }
             }

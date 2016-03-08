@@ -28,8 +28,11 @@ namespace Pool_Party_Graves
             Combo = Principal.AddSubMenu("Combo", "Combo");
             Combo.Add("UseQCombo", new CheckBox("Use Q"));
             Combo.Add("UseWCombo", new CheckBox("Use W"));
-            Combo.Add("UseECombo", new CheckBox("Use E"));
+            Combo.Add("UseECombo", new CheckBox("Use E (Target)"));
+            Combo.Add("UseEComboMouse", new CheckBox("Use E (Mouse)",false));
             Combo.Add("UseRCombo", new CheckBox("Use R"));
+            Combo.Add("UseYoumu", new CheckBox("Use Youmu"));
+            Combo.Add("UseYoumuX", new Slider("Use youmu case the enemy's life is below {0}%", 40, 10, 70));
 
             Laneclear = Principal.AddSubMenu("Laneclear", "Laneclear");
             Laneclear.Add("UseQLane", new CheckBox("Use Q"));
@@ -49,6 +52,7 @@ namespace Pool_Party_Graves
             Misc.Add("SkinID", new Slider("Skin ID: {0}", 5, 0, 6));
             Misc.Add("Interrupter", new CheckBox("Interrupter ?"));
             Misc.Add("Gapcloser", new CheckBox("Gapcloser ?"));
+            Misc.Add("UseRKs", new CheckBox("Use R Ks"));
 
             Draw = Principal.AddSubMenu("Drawing", "Drawing");
             Draw.Add("DrawQ", new CheckBox("Draw Q"));

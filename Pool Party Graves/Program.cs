@@ -36,27 +36,27 @@ namespace Pool_Party_Graves
 
             if(Graves.Q.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawQ"))
             {
-                Circle.Draw(Color.AliceBlue, Graves.Q.Range, Player.Instance.Position);
+                Circle.Draw(Color.Blue, Graves.Q.Range, Player.Instance.Position);
             }
 
             if (Graves.W.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawW"))
             {
-                Circle.Draw(Color.Purple, Graves.W.Range, Player.Instance.Position);
+                Circle.Draw(Color.Orange, Graves.W.Range, Player.Instance.Position);
             }
 
             if (Graves.E.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawE"))
             {
-                Circle.Draw(Color.AliceBlue, Graves.E.Range, Player.Instance.Position);
+                Circle.Draw(Color.Blue, Graves.E.Range, Player.Instance.Position);
             }
 
             if (Graves.R.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawR"))
             {
-                Circle.Draw(Color.Purple, Graves.R.Range, Player.Instance.Position);
+                Circle.Draw(Color.Orange, Graves.R.Range, Player.Instance.Position);
             }
 
-            if (Graves.R2.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawDMG"))
+            if (Graves.R2.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawR2"))
             {
-                Circle.Draw(Color.AliceBlue, Graves.R2.Range, Player.Instance.Position);
+                Circle.Draw(Color.Blue, Graves.R2.Range, Player.Instance.Position);
             }
         }
     }
