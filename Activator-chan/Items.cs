@@ -24,6 +24,7 @@ namespace Activator_chan
         public static Item FaceMountain;
         public static Item Mikael;
         public static Item Qss;
+        public static Item Qss2;
 
         //Offensive
 
@@ -43,6 +44,7 @@ namespace Activator_chan
             FaceMountain = new Item((int)ItemId.Face_of_the_Mountain, 700);
             Mikael = new Item((int)ItemId.Mikaels_Crucible, 750);
             Qss = new Item((int)ItemId.Quicksilver_Sash);
+            Qss2 = new Item((int)ItemId.Mercurial_Scimitar);
 
             Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
             Tiamat = new Item((int)ItemId.Tiamat, 300);
@@ -395,6 +397,79 @@ namespace Activator_chan
                     return; 
 
                 Qss.Cast();
+            }
+        }
+
+        public static void UseQss2()
+        {
+            if (!Qss2.IsReady() || !Qss2.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss"))
+                return;
+
+            if (Player.Instance.HasBuffOfType(BuffType.Charm))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Charm"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Fear))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Fear"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Silence))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Silence"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Snare))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Snare"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Taunt))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Taunt"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Suppression))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Suppression"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Polymorph))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Polymorph"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Disarm))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Disarm"))
+                    return;
+
+                Qss2.Cast();
+            }
+            else if (Player.Instance.HasBuffOfType(BuffType.Blind))
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Defensive, "Qss-Blind"))
+                    return;
+
+                Qss2.Cast();
             }
         }
     }

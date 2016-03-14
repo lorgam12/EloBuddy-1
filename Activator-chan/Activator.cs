@@ -12,12 +12,33 @@ using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
 
+using System.Net;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Version = System.Version;
+
 namespace Activator_chan
 {
     class Activator
     {
+        //https://github.com/Phandaros/EloBuddy/blob/master/KaPoppy/Helper.cs
+
+        public static void CheckForUpdates()
+        {
+            string RawVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/DownsecAkr/EloBuddy/master/" + Assembly.GetExecutingAssembly().GetName().Name + "/Properties/AssemblyInfo.cs");
+            var Try = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match(RawVersion);
+            if (Try.Success)
+            {
+                if (new Version(string.Format("{0}.{1}.{2}.{3}", Try.Groups[1], Try.Groups[2], Try.Groups[3], Try.Groups[4])) > Assembly.GetExecutingAssembly().GetName().Version)
+                {
+                    Chat.Print("There is a newer version that " + Assembly.GetExecutingAssembly().GetName().Name + ", please update");
+                }
+            }
+        }
+
         public static void Load()
         {
+            CheckForUpdates();
             Items.Load();
             Spells.Load();
             ActivatorMenu.Load();
@@ -167,6 +188,18 @@ namespace Activator_chan
                     return;
 
                 Chat.Print("Error Solari");
+            }
+
+            try
+            {
+                Items.UseQss2();
+            }
+            catch (Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error Qss2");
             }
 
             try
