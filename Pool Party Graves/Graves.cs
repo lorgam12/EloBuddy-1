@@ -168,6 +168,23 @@ namespace Pool_Party_Graves
                     }
                 }
 
+
+                if (W.IsReady())
+                {
+                    if (TargetW == null)
+                        return;
+
+                    if (TargetW.IsValidTarget(W.Range))
+                    {
+                        var WPred = W.GetPrediction(TargetW);
+
+                        if (WPred.HitChance >= HitChance.High)
+                        {
+                            W.Cast(WPred.CastPosition);
+                        }
+                    }
+                }
+
                 if (Q.IsReady())
                 {
                     if (TargetQ == null)
@@ -191,22 +208,6 @@ namespace Pool_Party_Graves
                             {
                                 Q.Cast(QPred.UnitPosition);
                             }
-                        }
-                    }
-                }
-
-                if (W.IsReady())
-                {
-                    if (TargetW == null)
-                        return;
-
-                    if (TargetW.IsValidTarget(W.Range))
-                    {
-                        var WPred = W.GetPrediction(TargetW);
-
-                        if (WPred.HitChance >= HitChance.High)
-                        {
-                            W.Cast(WPred.CastPosition);
                         }
                     }
                 }
