@@ -57,8 +57,8 @@ namespace Activator_chan
             Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
             Tiamat = new Item((int)ItemId.Tiamat, Player.Instance.GetAutoAttackRange());
             Muramana = new Item((int)ItemId.Muramana, Player.Instance.GetAutoAttackRange());
-            HydraRavenous = new Item((int)ItemId.Ravenous_Hydra, Player.Instance.GetAutoAttackRange());
-            HydraTitanic = new Item((int)ItemId.Titanic_Hydra, Player.Instance.GetAutoAttackRange());
+            HydraRavenous = new Item((int)ItemId.Ravenous_Hydra, 350);
+            HydraTitanic = new Item((int)ItemId.Titanic_Hydra, 385);
             BladeKing = new Item((int)ItemId.Blade_of_the_Ruined_King, 620);
 
             HealthPotion = new Item((int)ItemId.Health_Potion);
@@ -112,72 +112,6 @@ namespace Activator_chan
                     Tiamat.Cast();
                 }
             }
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                var T = TargetSelector.GetTarget(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck"), DamageType.Mixed);
-
-                if (T.IsValidTarget(Tiamat.Range) || T.HealthPercent >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "Tiamat/01"))
-                {
-                    Tiamat.Cast();
-                }
-            }
-        }
-
-        public static void UseMuramana()
-        {
-            if (!Muramana.IsReady() || !Muramana.IsOwned())
-                return;
-
-            if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "Muramana"))
-                return;
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                var T = TargetSelector.GetTarget(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck"), DamageType.Mixed);
-
-                if (T.HealthPercent >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "Muramana/01"))
-                {
-                    if (Player.Instance.CountEnemiesInRange(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck")) > ActivatorMenu.Slider(ActivatorMenu.Offensive, "Muramana0x03"))
-                    {
-                        Muramana.Cast();
-                    }
-                }
-            }
-        }
-
-        public static void UseHydraRavenous()
-        {
-            if (!HydraRavenous.IsReady() || !HydraRavenous.IsOwned())
-                return;
-
-            if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "HydraRavenous"))
-                return;
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
-            {
-                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValidTarget(HydraRavenous.Range) || x.IsEnemy);
-
-                if (Minion == null)
-                    return;
-
-                var Minions = EntityManager.MinionsAndMonsters.GetCircularFarmLocation(Minion, HydraRavenous.Range, (int)HydraRavenous.Range);
-
-                if (Minions.HitNumber >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraRavenous/02"))
-                {
-                    HydraRavenous.Cast();
-                }
-            }
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
-            {
-                var T = TargetSelector.GetTarget(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck"), DamageType.Mixed);
-
-                if (T.IsValidTarget(HydraRavenous.Range) || T.HealthPercent >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraRavenous/01"))
-                {
-                    HydraRavenous.Cast();
-                }
-            }
         }
 
         public static void UseHydraTitanic()
@@ -202,14 +136,50 @@ namespace Activator_chan
                     HydraTitanic.Cast();
                 }
             }
+        }
+
+        public static void UseHydraRavenous()
+        {
+            if (!HydraRavenous.IsReady() || !HydraRavenous.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "HydraRavenous"))
+                return;
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValidTarget(HydraRavenous.Range) || !x.IsEnemy);
+
+                if (Minion == null)
+                    return;
+
+                var Minions = EntityManager.MinionsAndMonsters.GetCircularFarmLocation(Minion, HydraRavenous.Range, (int)HydraRavenous.Range);
+
+                if (Minions.HitNumber >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraRavenous/02"))
+                {
+                    HydraRavenous.Cast();
+                }
+            }
+        }
+
+        public static void UseMuramana()
+        {
+            if (!Muramana.IsReady() || !Muramana.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "Muramana"))
+                return;
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 var T = TargetSelector.GetTarget(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck"), DamageType.Mixed);
 
-                if (T.IsValidTarget(HydraTitanic.Range) || T.HealthPercent >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraTitanic/01"))
+                if (T.HealthPercent >= ActivatorMenu.Slider(ActivatorMenu.Offensive, "Muramana/01"))
                 {
-                    HydraTitanic.Cast();
+                    if (Player.Instance.CountEnemiesInRange(ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck")) > ActivatorMenu.Slider(ActivatorMenu.Offensive, "Muramana0x03"))
+                    {
+                        Muramana.Cast();
+                    }
                 }
             }
         }

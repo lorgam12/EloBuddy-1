@@ -44,6 +44,67 @@ namespace Activator_chan
             ActivatorMenu.Load();
             Game.OnTick += Game_OnTick;
             Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
+        }
+
+        private static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
+        {
+            if (Items.HydraRavenous.IsReady() || Items.HydraRavenous.IsOwned())
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "HydraRavenous"))
+                    return;
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    var Enemy = target as AIHeroClient;
+
+                    if (!Enemy.IsEnemy)
+                        return;
+
+                    if(Enemy.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraRavenous/01"))
+                    {
+                        Items.HydraRavenous.Cast();
+                    }
+                }
+            }
+
+            if (Items.HydraTitanic.IsReady() || Items.HydraTitanic.IsOwned())
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "HydraTitanic"))
+                    return;
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    var Enemy = target as AIHeroClient;
+
+                    if (!Enemy.IsEnemy)
+                        return;
+
+                    if (Enemy.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Offensive, "HydraTitanic/01"))
+                    {
+                        Items.HydraTitanic.Cast();
+                    }
+                }
+            }
+
+            if (Items.Tiamat.IsReady() || Items.Tiamat.IsOwned())
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Offensive, "Tiamat"))
+                    return;
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    var Enemy = target as AIHeroClient;
+
+                    if (!Enemy.IsEnemy)
+                        return;
+
+                    if (Enemy.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Offensive, "Tiamat/01"))
+                    {
+                        Items.Tiamat.Cast();
+                    }
+                }
+            }
         }
 
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -52,6 +113,9 @@ namespace Activator_chan
                 return;
 
             if (sender.IsAlly || !args.Target.IsMe || sender.IsMe)
+                return;
+
+            if (sender == null)
                 return;
 
             var Enemy = (AIHeroClient)sender;
@@ -168,6 +232,9 @@ namespace Activator_chan
 
             try
             {
+                if (!Spells.CheckSmite())
+                    return;
+
                 Spells.UseSmite();
             }
             catch(Exception)
@@ -180,6 +247,9 @@ namespace Activator_chan
 
             try
             {
+                if (!Spells.CheckCleanse())
+                    return;
+
                 Spells.UseCleanse();
             }
             catch(Exception)
@@ -192,6 +262,9 @@ namespace Activator_chan
 
             try
             {
+                if (!Spells.CheckHeal())
+                    return;
+
                 Spells.UseHeal();
             }
             catch(Exception)
@@ -202,8 +275,12 @@ namespace Activator_chan
                 Chat.Print("Error Heal");
             }
 
+            /*
             try
             {
+                if (!Spells.CheckIgnite())
+                    return;
+
                 Spells.UseIgnite();
             }
             catch(Exception)
@@ -213,6 +290,7 @@ namespace Activator_chan
 
                 Chat.Print("Error Ignite");
             }
+            */
 
             try
             {

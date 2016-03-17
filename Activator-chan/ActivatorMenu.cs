@@ -89,7 +89,7 @@ namespace Activator_chan
             Defensive.AddLabel("Zhonya");
             Defensive.Add("Zhonya", new CheckBox("Use Zhonya ?"));
             Defensive.AddSeparator();
-            foreach (AIHeroClient x in EntityManager.Heroes.AllHeroes)
+            foreach (AIHeroClient x in EntityManager.Heroes.Enemies)
             {
                 foreach (var z in SpellsDatabase.CheckSpells)
                 {
@@ -104,7 +104,7 @@ namespace Activator_chan
             Defensive.AddLabel("Seraph");
             Defensive.Add("Seraph", new CheckBox("Use Seraph ?"));
             Defensive.AddSeparator();
-            foreach (AIHeroClient x in EntityManager.Heroes.AllHeroes)
+            foreach (AIHeroClient x in EntityManager.Heroes.Enemies)
             {
                 foreach (var z in SpellsDatabase.CheckSpells)
                 {
@@ -205,8 +205,10 @@ namespace Activator_chan
                 Summoner.Add("SRU_Krug", new CheckBox("Krug", false));
                 Summoner.Add("SRU_Razorbeak", new CheckBox("Razerbeak", false));
                 Summoner.AddSeparator(2);
+                Summoner.Add("Smite/Ks", new CheckBox("Use Smite Ks ?"));
             }
 
+            /*
             if(Spells.CheckIgnite())
             {
                 Summoner.AddLabel("Ignite");
@@ -217,7 +219,7 @@ namespace Activator_chan
                     Summoner.Add("Ignite/" + Enemy.ChampionName, new CheckBox(Enemy.ChampionName));
                 }
                 Summoner.AddSeparator(2);
-            }
+            }*/
         }
 
         public static bool CheckBox(Menu m, string s)

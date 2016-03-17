@@ -130,8 +130,7 @@ namespace Activator_chan
             if (Ignite == null)
             {
                 return false;
-            }
-            else if (Ignite != null)
+            }else if (Ignite != null)
             {
                 return true;
             }
@@ -256,11 +255,28 @@ namespace Activator_chan
                     Smite.Cast(Monster);
                 }
             }
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Smite/Ks"))
+                return;
+
+            var T = TargetSelector.GetTarget(Smite.Range, DamageType.True);
+
+            if (T == null)
+                return;
+
+            if (!T.IsValid || T.IsDead)
+                return;
+
+            if(T.Health <= SmiteDmg())
+            {
+                Smite.Cast(T);
+            }
+
         }
 
         private static int IgniteDmg()
         {
-            return new int[] { 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410 }[Player.Instance.Level];
+            return new int[] {0, 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410 }[Player.Instance.Level];
         }
 
 
@@ -268,15 +284,20 @@ namespace Activator_chan
         {
             CheckIgnite();
 
-            foreach (var x in EntityManager.Heroes.Enemies.Where(x => x.Health <= IgniteDmg() || x.IsValid || !x.IsDead).OrderByDescending(x => ActivatorMenu.Slider(ActivatorMenu.Summoner, "Ignite/" + x.ChampionName)))
+
+            Chat.Print(IgniteDmg());
+
+            var T = TargetSelector.GetTarget(Ignite.Range, DamageType.True);
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Ignite/" + T.ChampionName))
+                return;
+
+            if (T == null || T.IsDead || !T.IsValid)
+                return;
+
+            if(T.Health <= IgniteDmg())
             {
-                if (x != null)
-                {
-                    if (ActivatorMenu.CheckBox(ActivatorMenu.Summoner, x.ChampionName))
-                    {
-                        Ignite.Cast(x);
-                    }
-                }
+                Ignite.Cast(T);
             }
         }
     }
