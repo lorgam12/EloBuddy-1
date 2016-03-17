@@ -48,18 +48,18 @@ namespace Activator_chan
         {
             Zhonya = new Item((int)ItemId.Zhonyas_Hourglass);
             Seraph = new Item((int)ItemId.Seraphs_Embrace);
-            Solari = new Item((int)ItemId.Locket_of_the_Iron_Solari, 600);
+            Solari = new Item((int)ItemId.Locket_of_the_Iron_Solari, 700);
             FaceMountain = new Item((int)ItemId.Face_of_the_Mountain, 700);
-            Mikael = new Item((int)ItemId.Mikaels_Crucible, 750);
+            Mikael = new Item((int)ItemId.Mikaels_Crucible, 740);
             Qss = new Item((int)ItemId.Quicksilver_Sash);
             Qss2 = new Item((int)ItemId.Mercurial_Scimitar);
 
             Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
-            Tiamat = new Item((int)ItemId.Tiamat, 300);
+            Tiamat = new Item((int)ItemId.Tiamat, Player.Instance.GetAutoAttackRange());
             Muramana = new Item((int)ItemId.Muramana, Player.Instance.GetAutoAttackRange());
-            HydraRavenous = new Item((int)ItemId.Ravenous_Hydra, 300);
+            HydraRavenous = new Item((int)ItemId.Ravenous_Hydra, Player.Instance.GetAutoAttackRange());
             HydraTitanic = new Item((int)ItemId.Titanic_Hydra, Player.Instance.GetAutoAttackRange());
-            BladeKing = new Item((int)ItemId.Blade_of_the_Ruined_King, 450);
+            BladeKing = new Item((int)ItemId.Blade_of_the_Ruined_King, 620);
 
             HealthPotion = new Item((int)ItemId.Health_Potion);
             Biscuit = new Item((int)ItemId.Total_Biscuit_of_Rejuvenation);
