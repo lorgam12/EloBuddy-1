@@ -36,6 +36,14 @@ namespace Activator_chan
         public static Item HydraTitanic;
         public static Item BladeKing;
 
+        //Consumable
+
+        public static Item HealthPotion;
+        public static Item Biscuit;
+        public static Item RefillablePotion;
+        public static Item CorruptingPotion;
+        public static Item HuntersPotion;
+
         public static void Load()
         {
             Zhonya = new Item((int)ItemId.Zhonyas_Hourglass);
@@ -52,6 +60,12 @@ namespace Activator_chan
             HydraRavenous = new Item((int)ItemId.Ravenous_Hydra, 300);
             HydraTitanic = new Item((int)ItemId.Titanic_Hydra, Player.Instance.GetAutoAttackRange());
             BladeKing = new Item((int)ItemId.Blade_of_the_Ruined_King, 450);
+
+            HealthPotion = new Item((int)ItemId.Health_Potion);
+            Biscuit = new Item((int)ItemId.Total_Biscuit_of_Rejuvenation);
+            RefillablePotion = new Item((int)ItemId.Refillable_Potion);
+            CorruptingPotion = new Item((int)ItemId.Corrupting_Potion);
+            HuntersPotion = new Item((int)ItemId.Hunters_Potion);
         }
 
         public static void UseYoumu()
@@ -470,6 +484,94 @@ namespace Activator_chan
                     return;
 
                 Qss2.Cast();
+            }
+        }
+
+        public static void UseHealthPotion()
+        {
+            if (!HealthPotion.IsReady() || !HealthPotion.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "HealthPotion"))
+                return;
+
+            if(Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "HealthPotion/01"))
+            {
+                if(!Player.Instance.HasBuff("RegenerationPotion"))
+                {
+                    HealthPotion.Cast();
+                }
+            }
+        }
+
+        public static void UseBiscuit()
+        {
+            if (!Biscuit.IsReady() || !Biscuit.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "Biscuit"))
+                return;
+
+            if (Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "Biscuit/01"))
+            {
+                if (!Player.Instance.HasBuff("ItemMiniRegenPotion"))
+                {
+                    Biscuit.Cast();
+                }
+            }
+        }
+
+        public static void UseRefillablePotion()
+        {
+            if (!RefillablePotion.IsReady() || !RefillablePotion.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "RefillablePotion"))
+                return;
+
+            if (Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "RefillablePotion/01"))
+            {
+                if (!Player.Instance.HasBuff("ItemCrystalFlask"))
+                {
+                    RefillablePotion.Cast();
+                }
+            }
+        }
+
+        public static void UseHuntersPotion()
+        {
+            if (!HuntersPotion.IsReady() || !HuntersPotion.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "HuntersPotion"))
+                return;
+
+            Chat.Print("EOQ");
+
+            if (Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "HuntersPotion/01"))
+            {
+                Chat.Print("VAI MALUCO");
+                if (!Player.Instance.HasBuff("ItemCrystalFlaskJungle"))
+                {
+                    HuntersPotion.Cast();
+                }
+            }
+        }
+
+        public static void UseCorruptingPotion()
+        {
+            if (!CorruptingPotion.IsReady() || !CorruptingPotion.IsOwned())
+                return;
+
+            if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "CorruptingPotion"))
+                return;
+
+            if (Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "CorruptingPotion/01"))
+            {
+                if (!Player.Instance.HasBuff("ItemDarkCrystalFlask"))
+                {
+                    CorruptingPotion.Cast();
+                }
             }
         }
     }

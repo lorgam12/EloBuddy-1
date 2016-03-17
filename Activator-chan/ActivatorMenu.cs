@@ -16,7 +16,7 @@ namespace Activator_chan
 {
     class ActivatorMenu
     {
-        public static Menu Principal, Offensive, Defensive, Summoner, Priority;
+        public static Menu Principal, Offensive, Defensive, Consumable, Summoner, Priority;
 
         public static void Load()
         {
@@ -24,6 +24,28 @@ namespace Activator_chan
             Principal.Add("RangeCheck", new Slider("{0} Minimum range to check for enemies", 800, 500, 1400));
             Principal.Add("DrawRange", new CheckBox("Draw Range ?"));
             Principal.Add("ChatDebug", new CheckBox("Show erros ?", false));
+
+            Consumable = Principal.AddSubMenu("Consumable", "Consumable");
+
+            Consumable.Add("HealthPotion", new CheckBox("Use Health Potion ?"));
+            Consumable.Add("HealthPotion/01", new Slider("Use Health Potion case life is below {0}%", 15, 10, 60));
+            Consumable.AddSeparator(2);
+
+            Consumable.Add("Biscuit", new CheckBox("Use Biscuit ?"));
+            Consumable.Add("Biscuit/01", new Slider("Use Biscuit case life is below {0}%", 15, 10, 60));
+            Consumable.AddSeparator(2);
+
+            Consumable.Add("RefillablePotion", new CheckBox("Use Refillable Potion ?"));
+            Consumable.Add("RefillablePotion/01", new Slider("Use Refillable Potion case life is below {0}%", 15, 10, 60));
+            Consumable.AddSeparator(2);
+
+            Consumable.Add("CorruptingPotion", new CheckBox("Use Corrupting Potion ?"));
+            Consumable.Add("CorruptingPotion/01", new Slider("Use Corrupting Potion case life is below {0}%", 15, 10, 60));
+            Consumable.AddSeparator(2);
+
+            Consumable.Add("HuntersPotion", new CheckBox("Use Hunters Potion ?"));
+            Consumable.Add("HuntersPotion/01", new Slider("Use Hunters Potion case life is below {0}%", 15, 10, 60));
+            Consumable.AddSeparator(2);
 
             Offensive = Principal.AddSubMenu("Offensive", "Offensive");
 

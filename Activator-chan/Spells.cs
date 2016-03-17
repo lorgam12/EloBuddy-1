@@ -98,11 +98,11 @@ namespace Activator_chan
         {
             if (SmiteNames.Contains(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower()))
             {
-                Smite = new Spell.Targeted(SpellSlot.Summoner1, 500);
+                Smite = new Spell.Targeted(SpellSlot.Summoner1, 570);
             }
             else if (SmiteNames.Contains(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower()))
             {
-                Smite = new Spell.Targeted(SpellSlot.Summoner2, 500);
+                Smite = new Spell.Targeted(SpellSlot.Summoner2, 570);
             }
 
             if (Smite == null)
@@ -141,16 +141,7 @@ namespace Activator_chan
 
         public static void UseCleanse()
         {
-            if(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.Contains("Cleanse"))
-            {
-                Cleanse = new Spell.Active(SpellSlot.Summoner1, 0);
-            }else if(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.Contains("Cleanse"))
-            {
-                Cleanse = new Spell.Active(SpellSlot.Summoner2, 0);
-            }
-
-            if (Cleanse == null || !Cleanse.IsReady())
-                return;
+            CheckCleanse();
 
             if (ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Cleanse"))
                 return;
@@ -213,17 +204,7 @@ namespace Activator_chan
 
         public static void UseHeal()
         {
-            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.Contains("Heal"))
-            {
-                Heal = new Spell.Active(SpellSlot.Summoner1, 0);
-            }
-            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.Contains("Heal"))
-            {
-                Heal = new Spell.Active(SpellSlot.Summoner2, 0);
-            }
-
-            if (Heal == null || !Heal.IsReady())
-                return;
+            CheckHeal();
 
             if (!ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Heal"))
                 return;
@@ -236,17 +217,7 @@ namespace Activator_chan
 
         public static void UseBarrier()
         {
-            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.Contains("Barrier"))
-            {
-                Barrier = new Spell.Active(SpellSlot.Summoner1, 0);
-            }
-            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.Contains("Barrier"))
-            {
-                Barrier = new Spell.Active(SpellSlot.Summoner2, 0);
-            }
-
-            if (Barrier == null || !Barrier.IsReady())
-                return;
+            CheckBarrier();
 
             Barrier.Cast();
         }
@@ -268,37 +239,22 @@ namespace Activator_chan
 
         public static void UseSmite()
         {
-            if (SmiteNames.Contains(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower()))
-            {
-                Smite = new Spell.Targeted(SpellSlot.Summoner1, 550);
-            }
-            else if (SmiteNames.Contains(Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower()))
-            {
-                Smite = new Spell.Targeted(SpellSlot.Summoner2, 550);
-            }
-
-            if (Smite == null || !Smite.IsReady())
-                return;
+            CheckSmite();
 
             if (!ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Smite"))
                 return;
 
             var Monster = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderBy(x => x.MaxHealth).Where(x => !x.Name.Contains("Mini")).FirstOrDefault(x => ActivatorMenu.CheckBox(ActivatorMenu.Summoner, x.BaseSkinName));
 
-            if (Vector3.Distance(Player.Instance.ServerPosition, Monster.ServerPosition) < Smite.Range)
+            if (Monster == null)
+                return;
+
+            if (Vector3.Distance(Player.Instance.ServerPosition, Monster.ServerPosition) <= Smite.Range)
             {
                 if(Monster.Health <= SmiteDmg())
                 {
                     Smite.Cast(Monster);
                 }
-                else
-                {
-                    Chat.Print("HP" + Monster.Health + " / " + SmiteDmg());
-                }
-            }
-            else
-            {
-                Chat.Print("Error");
             }
         }
 
@@ -310,22 +266,7 @@ namespace Activator_chan
 
         public static void UseIgnite()
         {
-            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.Contains("Ignite"))
-            {
-                Ignite = new Spell.Targeted(SpellSlot.Summoner1, 600);
-            }
-            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.Contains("Ignite"))
-            {
-                Ignite = new Spell.Targeted(SpellSlot.Summoner2, 600);
-            }
-
-            if (Ignite == null)
-                return;
-
-            Ignite = new Spell.Targeted(Ignite.Slot, 600);
-
-            if (!Ignite.IsLearned || ActivatorMenu.CheckBox(ActivatorMenu.Summoner, "Ignite"))
-                return;
+            CheckIgnite();
 
             foreach (var x in EntityManager.Heroes.Enemies.Where(x => x.Health <= IgniteDmg() || x.IsValid || !x.IsDead).OrderByDescending(x => ActivatorMenu.Slider(ActivatorMenu.Summoner, "Ignite/" + x.ChampionName)))
             {

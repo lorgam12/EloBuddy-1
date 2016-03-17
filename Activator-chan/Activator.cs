@@ -108,6 +108,66 @@ namespace Activator_chan
         {
             try
             {
+                Items.UseHealthPotion();
+            }
+            catch(Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error HealthPotion");
+            }
+
+            try
+            {
+                Items.UseBiscuit();
+            }
+            catch (Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error Biscuit");
+            }
+
+            try
+            {
+                Items.UseRefillablePotion();
+            }
+            catch (Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error Refillable Potion");
+            }
+
+            try
+            {
+                Items.UseHuntersPotion();
+            }
+            catch (Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error Hunters Potion");
+            }
+
+            try
+            {
+                Items.UseCorruptingPotion();
+            }
+            catch (Exception)
+            {
+                if (!ActivatorMenu.CheckBox(ActivatorMenu.Principal, "ChatDebug"))
+                    return;
+
+                Chat.Print("Error Corrupting Potion");
+            }
+
+            try
+            {
                 Spells.UseSmite();
             }
             catch(Exception)
