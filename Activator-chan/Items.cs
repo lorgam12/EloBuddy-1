@@ -546,11 +546,8 @@ namespace Activator_chan
             if (!ActivatorMenu.CheckBox(ActivatorMenu.Consumable, "HuntersPotion"))
                 return;
 
-            Chat.Print("EOQ");
-
             if (Player.Instance.HealthPercent <= ActivatorMenu.Slider(ActivatorMenu.Consumable, "HuntersPotion/01"))
             {
-                Chat.Print("VAI MALUCO");
                 if (!Player.Instance.HasBuff("ItemCrystalFlaskJungle"))
                 {
                     HuntersPotion.Cast();
