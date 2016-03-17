@@ -23,6 +23,7 @@ namespace Activator_chan
             Principal = MainMenu.AddMenu("Activator", "Activator");
             Principal.Add("RangeCheck", new Slider("{0} Minimum range to check for enemies", 800, 500, 1400));
             Principal.Add("DrawRange", new CheckBox("Draw Range ?"));
+            Principal.Add("DrawSmite", new CheckBox("Draw Smite Range ?", false));
             Principal.Add("ChatDebug", new CheckBox("Show erros ?", false));
 
             Consumable = Principal.AddSubMenu("Consumable", "Consumable");

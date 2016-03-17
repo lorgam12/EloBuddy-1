@@ -35,7 +35,7 @@ namespace Activator_chan
                 Circle.Draw(Color.Pink, ActivatorMenu.Slider(ActivatorMenu.Principal, "RangeCheck"), Player.Instance.Position);
             }
 
-            if(Spells.CheckSmite())
+            if(ActivatorMenu.CheckBox(ActivatorMenu.Principal, "DrawSmite") || Spells.CheckSmite())
             {
                 Circle.Draw(Color.Orange, Spells.Smite.Range, Player.Instance.Position);
             }
