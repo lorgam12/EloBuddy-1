@@ -4,6 +4,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
+using SharpDX;
 
 namespace Championship_Riven
 {
@@ -23,13 +24,14 @@ namespace Championship_Riven
 
         public static Item Hydra;
         public static Item Tiamat;
+        public static Item Youmuu;
 
         public static AIHeroClient FocusTarget;
 
         public static void Load()
         {
             Q = new Spell.Skillshot(SpellSlot.Q, 275, SkillShotType.Circular, 250, 2200, 100);
-            W = new Spell.Active(SpellSlot.W, 260);
+            W = new Spell.Active(SpellSlot.W, 250);
             E = new Spell.Skillshot(SpellSlot.E, 310, SkillShotType.Linear);
             R = new Spell.Active(SpellSlot.R);
             R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 125);
@@ -45,6 +47,7 @@ namespace Championship_Riven
 
             Hydra = new Item((int)ItemId.Ravenous_Hydra, 350);
             Tiamat = new Item((int)ItemId.Tiamat, 350);
+            Youmuu = new Item((int)ItemId.Youmuus_Ghostblade, 0);
 
             DamageIndicator.Initialize(DamageTotal);
             Game.OnUpdate += Game_OnUpdate;
@@ -106,6 +109,9 @@ namespace Championship_Riven
 
         private static void Combo()
         {
+            if (FocusTarget == null)
+                return;
+
             if (!RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
             {
                 if (E.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
@@ -123,6 +129,16 @@ namespace Championship_Riven
                         if (Player.Instance.Distance(FocusTarget) < W.Range)
                         {
                             W.Cast();
+
+                            if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                            {
+                                Core.DelayAction(() => Tiamat.Cast(), 50);
+                            }
+
+                            if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                            {
+                                Core.DelayAction(() => Hydra.Cast(), 50);
+                            }
                         }
                     }
                 }
@@ -131,7 +147,22 @@ namespace Championship_Riven
                 {
                     if (FocusTarget.HealthPercent > RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
                     {
-                        R.Cast();
+                        if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 0)
+                        {
+                            if(FocusTarget.HealthPercent <= 40)
+                            {
+                                R.Cast();
+                            }
+                        }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
+                        {
+                            if(DamageTotal(FocusTarget) >= FocusTarget.Health)
+                            {
+                                R.Cast();
+                            }
+                        }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 2)
+                        {
+                            R.Cast();
+                        }
                     }
                 }
             }
@@ -155,7 +186,17 @@ namespace Championship_Riven
                                         {
                                             R.Cast();
                                         }
-                                        Core.DelayAction(() => W.Cast(), 1);
+                                        Core.DelayAction(() => W.Cast(), 50);
+
+                                        if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                                        {
+                                            Core.DelayAction(() => Tiamat.Cast(), 50);
+                                        }
+
+                                        if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                                        {
+                                            Core.DelayAction(() => Hydra.Cast(), 50);
+                                        }
                                     }
                                 }
                             }
@@ -186,13 +227,23 @@ namespace Championship_Riven
                 {
                     if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                     {
-                        if (Player.Instance.Distance(FocusTarget) < E.Range + W.Range - Player.Instance.GetAutoAttackRange())
+                        if (Player.Instance.Distance(FocusTarget) < E.Range + W.Range)
                         {
-                            Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                            Player.CastSpell(SpellSlot.E, FocusTarget.ServerPosition);
 
                             if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
                             {
                                 Core.DelayAction(() => W.Cast(), 1);
+
+                                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                                {
+                                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                                }
+
+                                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                                {
+                                    Core.DelayAction(() => Hydra.Cast(), 50);
+                                }
                             }
                         }
                     }
@@ -217,6 +268,16 @@ namespace Championship_Riven
                             if (Player.Instance.Distance(FocusTarget) < W.Range)
                             {
                                 W.Cast();
+
+                                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                                {
+                                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                                }
+
+                                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                                {
+                                    Core.DelayAction(() => Hydra.Cast(), 50);
+                                }
                             }
                         }
                     }
@@ -251,12 +312,12 @@ namespace Championship_Riven
                 {
                     W.Cast();
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady())
+                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
                     {
                         Core.DelayAction(() => Tiamat.Cast(), 50);
                     }
 
-                    if (Hydra.IsOwned() || Hydra.IsReady())
+                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
                     {
                         Core.DelayAction(() => Hydra.Cast(), 50);
                     }
@@ -277,12 +338,12 @@ namespace Championship_Riven
                 {
                     W.Cast();
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady())
+                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
                     {
                         Core.DelayAction(() => Tiamat.Cast(), 50);
                     }
 
-                    if (Hydra.IsOwned() || Hydra.IsReady())
+                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
                     {
                         Core.DelayAction(() => Hydra.Cast(), 50);
                     }
@@ -300,7 +361,7 @@ namespace Championship_Riven
             if (args.Msg != 0x202)
                 return;
 
-            FocusTarget = EntityManager.Heroes.Enemies.FindAll(x => x.IsValid || x.Distance(Game.CursorPos) < 3000 || x.IsVisible).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault();
+            FocusTarget = EntityManager.Heroes.Enemies.FindAll(x => !x.IsDead || x.IsValid || x.Distance(Game.CursorPos) < 3000 || x.IsVisible).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault();
         }
 
         private static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
@@ -314,7 +375,12 @@ namespace Championship_Riven
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
-                        if(Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                        if (Youmuu.IsOwned() || Youmuu.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseYoumuu"))
+                        {
+                            Core.DelayAction(() => Youmuu.Cast(), 50);
+                        }
+
+                        if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
                         {
                             Q.Cast(target.Position);
                         }
@@ -395,6 +461,16 @@ namespace Championship_Riven
             if(Player.Instance.CountEnemiesInRange(W.Range) > RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
             {
                 W.Cast();
+
+                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                {
+                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                }
+
+                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                {
+                    Core.DelayAction(() => Hydra.Cast(), 50);
+                }
             }
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
@@ -406,13 +482,39 @@ namespace Championship_Riven
                     if (!RivenMenu.CheckBox(RivenMenu.Combo, "R2/" + FocusTarget.BaseSkinName) || !R.IsReady())
                         return;
 
-                    if(FocusTarget.Health <= RDmg(FocusTarget))
+                    if (FocusTarget == null)
+                        return;
+
+                    if(RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 0)
+                    {
+                        if(Player.Instance.Distance(FocusTarget) < R2.Range)
+                        {
+                            if (FocusTarget.Health <= RDmg(FocusTarget))
+                            {
+                                var RPred = R2.GetPrediction(FocusTarget);
+
+                                if (RPred.HitChance >= HitChance.High)
+                                {
+                                    if(!FocusTarget.IsValidTarget(Player.Instance.GetAutoAttackRange()))
+                                    {
+                                        R2.Cast(RPred.UnitPosition);
+                                    }
+                                }
+                            }
+                        }
+                    }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 1)
                     {
                         var RPred = R2.GetPrediction(FocusTarget);
 
-                        if(RPred.HitChance >= HitChance.High)
+                        if (Player.Instance.Distance(FocusTarget) < R2.Range)
                         {
-                            R2.Cast(RPred.UnitPosition);
+                            if (RPred.HitChance >= HitChance.High)
+                            {
+                                if (FocusTarget.IsValidTarget(Player.Instance.GetAutoAttackRange()))
+                                {
+                                    R2.Cast(RPred.UnitPosition);
+                                }
+                            }
                         }
                     }
                 }
@@ -455,7 +557,21 @@ namespace Championship_Riven
                 {
                     if (RivenMenu.CheckBox(RivenMenu.Combo, "E/" + sender.BaseSkinName + "/Q"))
                     {
-                        Player.CastSpell(SpellSlot.E, Game.CursorPos);
+                        if(RivenMenu.CheckBox(RivenMenu.Combo, "EToMouse"))
+                        {
+                            Player.CastSpell(SpellSlot.E, Game.CursorPos);
+                        }
+
+                        if(RivenMenu.CheckBox(RivenMenu.Combo, "EToBehind"))
+                        {
+                            var PosX = Player.Instance.Position.X / 2;
+                            var PosY = Player.Instance.Position.Y;
+                            var PosZ = Player.Instance.Position.Z;
+
+                            Vector3 Loc = new Vector3(PosX, PosY, PosZ);
+
+                            Player.CastSpell(SpellSlot.E, (Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Loc, E.Range - 1).To3D() : Loc));
+                        }
                     }
                 }
 
@@ -498,6 +614,16 @@ namespace Championship_Riven
                 if(Player.Instance.Distance(sender) < W.Range)
                 {
                     W.Cast();
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
                 }
             }
         }
@@ -513,6 +639,16 @@ namespace Championship_Riven
             if(Player.Instance.Distance(sender) < W.Range || RivenMenu.CheckBox(RivenMenu.Misc, "InterrupterW"))
             {
                 W.Cast();
+
+                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                {
+                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                }
+
+                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                {
+                    Core.DelayAction(() => Hydra.Cast(), 50);
+                }
             }
         }
 
@@ -547,30 +683,10 @@ namespace Championship_Riven
                     CountQ = 0;
                     T = 393;
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady())
-                    {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
-                    }
-
-                    if (Hydra.IsOwned() || Hydra.IsReady())
-                    {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
-                    }
-
                     break;
 
                 case "Spell2":
                     T = 170;
-                    
-                    if(Tiamat.IsOwned() || Tiamat.IsReady())
-                    {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
-                    }
-
-                    if(Hydra.IsOwned() || Hydra.IsReady())
-                    {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
-                    }
 
                     break;
 
@@ -578,12 +694,32 @@ namespace Championship_Riven
 
                     break;
                 case "Spell4a":
-
                     T = 0;
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
+
                     break;
                 case "Spell4b":
-
                     T = 150;
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
+
                     break;
             }
 

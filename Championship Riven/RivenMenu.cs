@@ -27,7 +27,10 @@ namespace Championship_Riven
             Combo.Add("UseECombo", new CheckBox("Use E"));
             Combo.Add("UseRCombo", new CheckBox("Use R?"));
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
-            Combo.Add("UseIgnite", new CheckBox("Use Ignite?"));
+            Combo.Add("UseYoumuu", new CheckBox("Use Youmu?"));
+            Combo.Add("UseTiamat", new CheckBox("Use Tiamat?"));
+            Combo.Add("UseHydra", new CheckBox("Use Hydra?"));
+            //Combo.Add("UseIgnite", new CheckBox("Use Ignite?"));
             Combo.AddSeparator(3);
             Combo.AddLabel("Spell W: Settings");
             foreach(var Enemy in EntityManager.Heroes.Enemies)
@@ -37,6 +40,8 @@ namespace Championship_Riven
             Combo.Add("W/Auto", new Slider("Auto W if {0} Enemies <=", 3, 1, 5));
             Combo.AddSeparator(3);
             Combo.AddLabel("Spell E: Settings");
+            Combo.Add("EToMouse", new CheckBox("Use E To Pos Cursor"));
+            Combo.Add("EToBehind", new CheckBox("Use E To Back", false));
             foreach(var Enemy in EntityManager.Heroes.Enemies)
             {
                 Combo.AddLabel(Enemy.ChampionName);
@@ -48,8 +53,8 @@ namespace Championship_Riven
             }
             Combo.AddSeparator(3);
             Combo.AddLabel("Spell R: Settings");
-            Combo.Add("UseRType", new ComboBox("Use R when", 0, "Normal Kill", "Hard Kill", "Always"));
-            Combo.Add("DontR1", new Slider("Dont R if Target HP {0}% <=", 25, 10, 50));
+            Combo.Add("UseRType", new ComboBox("Use R when", 1, "Normal Kill", "Hard Kill", "Always"));
+            Combo.Add("DontR1", new Slider("Dont R if Target HP {0}% <=", 15, 10, 50));
             Combo.AddSeparator(3);
             Combo.AddLabel("Spell R2: Settings");
             Combo.Add("UseR2Type", new ComboBox("Use R2 when", 0, "Kill only", "Max damage"));
