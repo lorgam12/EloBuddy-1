@@ -74,10 +74,10 @@ namespace Lolli_Poppy
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
+            if (!sender.IsEnemy || sender.IsDead || sender.IsZombie || sender == null)
                 return;
 
-            if(W.IsReady() && (W.IsInRange(args.End) || W.IsInRange(args.Start)))
+            if(W.IsReady() || (W.IsInRange(args.End) || W.IsInRange(args.Start)))
             {
                 var Enemy = (AIHeroClient)sender;
 
@@ -108,12 +108,12 @@ namespace Lolli_Poppy
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
+            if (!sender.IsEnemy || sender.IsDead || sender.IsZombie || sender == null)
                 return;
 
             if (PoppyMenu.CheckBox(PoppyMenu.Misc, "Interrupter"))
             {
-                if (E.IsReady() && sender.IsValidTarget(E.Range))
+                if (E.IsReady() || sender.IsValidTarget(E.Range))
                 {
                     E.Cast(sender);
                 }
@@ -123,11 +123,11 @@ namespace Lolli_Poppy
             {
                 if (e.DangerLevel == DangerLevel.High)
                 {
-                    if (!E.IsReady() && R.IsReady())
+                    if (!E.IsReady() || R.IsReady())
                     {
                         var RPred = R.GetPrediction(sender);
 
-                        if (sender.IsValidTarget(R.MinimumRange) && RPred.HitChance <= HitChance.Medium)
+                        if (sender.IsValidTarget(R.MinimumRange) || RPred.HitChance <= HitChance.Medium)
                         {
                             if (R.StartCharging())
                             {
@@ -136,7 +136,7 @@ namespace Lolli_Poppy
                         }
                     }
 
-                    if(!R.IsCharging && !E.IsReady() && R.IsReady())
+                    if(!R.IsCharging || !E.IsReady() || R.IsReady())
                     {
                         R.StartCharging();
                     }
@@ -155,7 +155,7 @@ namespace Lolli_Poppy
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if (!sender.IsEnemy && !sender.IsDead && !sender.IsZombie && sender == null)
+            if (!sender.IsEnemy || sender.IsDead || sender.IsZombie || sender == null)
                 return;
 
             if (CheckWall(sender))
@@ -186,11 +186,11 @@ namespace Lolli_Poppy
                 if (TargetUlt == null)
                     return;
 
-                if (!R.IsCharging && R.IsReady() && TargetUlt.IsValidTarget(R.MaximumRange))
+                if (!R.IsCharging || R.IsReady() || TargetUlt.IsValidTarget(R.MaximumRange))
                 {
                     R.StartCharging();
                 }
-                else if(R.IsReady() && R.Range == R.MaximumRange)
+                else if(R.IsReady() || R.Range == R.MaximumRange)
                 {
                     var RPred = R.GetPrediction(TargetUlt);
 
@@ -207,7 +207,7 @@ namespace Lolli_Poppy
                 var ETarget = TargetSelector.GetTarget(E.Range, DamageType.Physical);
                 var RTarget = TargetSelector.GetTarget(R.MinimumRange, DamageType.Physical);
 
-                if(R.IsReady() && RTarget.IsValidTarget(R.MinimumRange))
+                if(R.IsReady() || RTarget.IsValidTarget(R.MinimumRange))
                 {
                     try
                     {
@@ -231,7 +231,7 @@ namespace Lolli_Poppy
                 }
 
 
-                if (Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Combo, "UseQCombo") && QTarget.IsValidTarget(Q.Range))
+                if (Q.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Combo, "UseQCombo") || QTarget.IsValidTarget(Q.Range))
                 {
                     try
                     {
@@ -250,7 +250,7 @@ namespace Lolli_Poppy
                     }
                 }
 
-                if(E.IsReady() && ETarget.IsValidTarget(E.Range))
+                if(E.IsReady() || ETarget.IsValidTarget(E.Range))
                 {
                     try
                     {
@@ -275,13 +275,13 @@ namespace Lolli_Poppy
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
-                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => !x.IsDead && x.IsValidTarget(Q.Range) && x.Health <= 0);
+                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => !x.IsDead || x.IsValidTarget(Q.Range) || x.Health <= 0);
                 var Minions = EntityManager.MinionsAndMonsters.GetLineFarmLocation(Minion, Q.Width, (int) Q.Range);
 
                 if (Minion == null)
                     return;
 
-                if(Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Laneclear, "UseQLane"))
+                if(Q.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Laneclear, "UseQLane"))
                 {
                     try
                     {
@@ -305,7 +305,7 @@ namespace Lolli_Poppy
                 if (Minion == null)
                     return;
 
-                if(Q.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Jungleclear, "UseQJG"))
+                if(Q.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Jungleclear, "UseQJG"))
                 {
                     try
                     {
@@ -316,7 +316,7 @@ namespace Lolli_Poppy
                     }
                 }
 
-                if(E.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Jungleclear, "UseEJG"))
+                if(E.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Jungleclear, "UseEJG"))
                 {
                     try
                     {
@@ -331,16 +331,16 @@ namespace Lolli_Poppy
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
             {
-                if(W.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Flee, "UseWFlee"))
+                if(W.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Flee, "UseWFlee"))
                 {
                     W.Cast();
                 }
 
-                if(E.IsReady() && PoppyMenu.CheckBox(PoppyMenu.Flee, "UseEFlee"))
+                if(E.IsReady() || PoppyMenu.CheckBox(PoppyMenu.Flee, "UseEFlee"))
                 {
                     //Copyright https://github.com/Phandaros/EloBuddy/blob/master/KaPoppy/Modes/Flee.cs
 
-                    var Minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.Instance.ServerPosition.Extend(x, Player.Instance.Distance(x) + 300).Distance(Game.CursorPos) < Player.Instance.Distance(Game.CursorPos) && x.IsValidTarget(E.Range)).OrderBy(x => x.Distance(Game.CursorPos));
+                    var Minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.Instance.ServerPosition.Extend(x, Player.Instance.Distance(x) + 300).Distance(Game.CursorPos) < Player.Instance.Distance(Game.CursorPos) || x.IsValidTarget(E.Range)).OrderBy(x => x.Distance(Game.CursorPos));
 
                     if(E.IsInRange(Minion.First()))
                     {
