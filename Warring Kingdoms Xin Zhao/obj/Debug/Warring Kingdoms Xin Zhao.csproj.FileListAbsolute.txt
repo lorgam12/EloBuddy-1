@@ -1,0 +1,10 @@
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\Warring Kingdoms Xin Zhao.exe.config
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\Warring Kingdoms Xin Zhao.exe
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\Warring Kingdoms Xin Zhao.pdb
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\obj\Debug\Warring Kingdoms Xin Zhao.exe
+C:\Users\Lawiet\Desktop\Projetos\Warring Kingdoms Xin Zhao\Warring Kingdoms Xin Zhao\obj\Debug\Warring Kingdoms Xin Zhao.pdb
