@@ -10,3 +10,8 @@ C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.exe
 C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.pdb
 C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.Properties.Resources.resources
 C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.csproj.GenerateResource.Cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Baseult\obj\Debug\Baseult.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Baseult\obj\Debug\Baseult.csproj.GenerateResource.Cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Baseult\obj\Debug\Baseult.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Baseult\obj\Debug\Baseult.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Baseult\bin\Debug\Baseult.exe.config
