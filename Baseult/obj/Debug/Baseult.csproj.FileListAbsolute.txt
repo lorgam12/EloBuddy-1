@@ -1,0 +1,12 @@
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\Baseult.exe.config
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\Baseult.exe
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\Baseult.pdb
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.exe
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.pdb
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.Properties.Resources.resources
+C:\Users\Lawiet\Desktop\Projetos\Baseult\Baseult\obj\Debug\Baseult.csproj.GenerateResource.Cache
