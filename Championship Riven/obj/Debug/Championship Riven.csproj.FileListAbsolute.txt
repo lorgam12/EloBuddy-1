@@ -1,0 +1,11 @@
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\Championship Riven.exe.config
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\Championship Riven.exe
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\Championship Riven.pdb
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\obj\Debug\Championship Riven.exe
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\obj\Debug\Championship Riven.pdb
+C:\Users\Lawiet\Desktop\Projetos\Championship Riven\Championship Riven\obj\Debug\Championship Riven.csprojResolveAssemblyReference.cache
