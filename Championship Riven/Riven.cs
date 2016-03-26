@@ -110,7 +110,7 @@ namespace Championship_Riven
             {
                 if (E.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                 {
-                    if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
+                    if (Player.Instance.Distance(FocusTarget) < E.Range + Player.Instance.GetAutoAttackRange())
                     {
                         Player.CastSpell(SpellSlot.E, FocusTarget.Position);
                     }
@@ -120,7 +120,7 @@ namespace Championship_Riven
                 {
                     if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
                     {
-                        if (FocusTarget.IsValidTarget(W.Range))
+                        if (Player.Instance.Distance(FocusTarget) < W.Range)
                         {
                             W.Cast();
                         }
@@ -145,7 +145,7 @@ namespace Championship_Riven
                     {
                         if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
                         {
-                            if (FocusTarget.IsValidTarget(W.Range))
+                            if (Player.Instance.Distance(FocusTarget) < W.Range)
                             {
                                 if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
                                 {
@@ -166,7 +166,7 @@ namespace Championship_Riven
                     {
                         if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
                         {
-                            if (FocusTarget.IsValidTarget(E.Range))
+                            if (Player.Instance.Distance(FocusTarget) < E.Range)
                             {
                                 if (!CheckUlt())
                                 {
@@ -186,7 +186,7 @@ namespace Championship_Riven
                 {
                     if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                     {
-                        if (FocusTarget.IsValidTarget(E.Range + W.Range))
+                        if (Player.Instance.Distance(FocusTarget) < E.Range + W.Range - Player.Instance.GetAutoAttackRange())
                         {
                             Player.CastSpell(SpellSlot.E, FocusTarget.Position);
 
@@ -203,7 +203,7 @@ namespace Championship_Riven
                     {
                         if(RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                         {
-                            if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
+                            if (Player.Instance.Distance(FocusTarget) < E.Range)
                             {
                                 Player.CastSpell(SpellSlot.E, FocusTarget.Position);
                             }
@@ -214,7 +214,7 @@ namespace Championship_Riven
                     {
                         if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
                         {
-                            if (FocusTarget.IsValidTarget(W.Range))
+                            if (Player.Instance.Distance(FocusTarget) < W.Range)
                             {
                                 W.Cast();
                             }
@@ -250,6 +250,16 @@ namespace Championship_Riven
                 if (Minions.HitNumber >= RivenMenu.Slider(RivenMenu.Laneclear, "UseWLaneMin"))
                 {
                     W.Cast();
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady())
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady())
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
                 }
             }
         }
@@ -266,6 +276,16 @@ namespace Championship_Riven
                 if(Monsters.IsValidTarget(W.Range))
                 {
                     W.Cast();
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady())
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady())
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
                 }
             }
 
@@ -294,17 +314,23 @@ namespace Championship_Riven
                 {
                     if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                     {
-                        Q.Cast(target.Position);
+                        if(Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                        {
+                            Q.Cast(target.Position);
+                        }
                     }
 
                     if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                     {
-                        Q.Cast(target.Position);
+                        if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                        {
+                            Q.Cast(target.Position);
+                        }
                     }
 
                     if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                     {
-                        if(target.IsValidTarget(Q.Range + Player.Instance.GetAutoAttackRange()))
+                        if(Player.Instance.Distance(FocusTarget) < Q.Range + Player.Instance.GetAutoAttackRange())
                         {
                             Q.Cast(target.Position.Distance(Player.Instance.Position) > Q.Range ? Player.Instance.Position.Extend(target.Position, Q.Range - 1).To3D() : target.Position);
                         }
@@ -377,7 +403,7 @@ namespace Championship_Riven
 
                 if(CheckUlt() || RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
                 {
-                    if (!RivenMenu.CheckBox(RivenMenu.Combo, "R2/" + FocusTarget.BaseSkinName))
+                    if (!RivenMenu.CheckBox(RivenMenu.Combo, "R2/" + FocusTarget.BaseSkinName) || !R.IsReady())
                         return;
 
                     if(FocusTarget.Health <= RDmg(FocusTarget))
@@ -464,9 +490,12 @@ namespace Championship_Riven
             if (sender.IsMe || sender.IsAlly || sender == null)
                 return;
 
-            if(e.End == Player.Instance.Position)
+            if (!RivenMenu.CheckBox(RivenMenu.Misc, "Gapcloser"))
+                return;
+
+            if(e.End == Player.Instance.Position || RivenMenu.CheckBox(RivenMenu.Misc, "GapcloserW"))
             {
-                if(sender.IsValidTarget(W.Range))
+                if(Player.Instance.Distance(sender) < W.Range)
                 {
                     W.Cast();
                 }
@@ -478,7 +507,10 @@ namespace Championship_Riven
             if (sender.IsMe || sender.IsAlly || sender == null)
                 return;
 
-            if(sender.IsValidTarget(W.Range))
+            if (!RivenMenu.CheckBox(RivenMenu.Misc, "Interrupter"))
+                return;
+
+            if(Player.Instance.Distance(sender) < W.Range || RivenMenu.CheckBox(RivenMenu.Misc, "InterrupterW"))
             {
                 W.Cast();
             }
@@ -489,12 +521,15 @@ namespace Championship_Riven
             if (!sender.IsMe)
                 return;
 
+            var T = 0;
+
             switch(args.Animation)
             {
                 case "Spell1a":
 
                     LastQ = Core.GameTickCount;
                     CountQ = 1;
+                    T = 291;
 
                     break;
 
@@ -502,6 +537,7 @@ namespace Championship_Riven
 
                     LastQ = Core.GameTickCount;
                     CountQ = 2;
+                    T = 291;
 
                     break;
 
@@ -509,9 +545,59 @@ namespace Championship_Riven
 
                     LastQ = 0;
                     CountQ = 0;
+                    T = 393;
+
+                    if (Tiamat.IsOwned() || Tiamat.IsReady())
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if (Hydra.IsOwned() || Hydra.IsReady())
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
 
                     break;
+
+                case "Spell2":
+                    T = 170;
+                    
+                    if(Tiamat.IsOwned() || Tiamat.IsReady())
+                    {
+                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                    }
+
+                    if(Hydra.IsOwned() || Hydra.IsReady())
+                    {
+                        Core.DelayAction(() => Hydra.Cast(), 50);
+                    }
+
+                    break;
+
+                case "Spell3":
+
+                    break;
+                case "Spell4a":
+
+                    T = 0;
+                    break;
+                case "Spell4b":
+
+                    T = 150;
+                    break;
             }
+
+            if(T != 0 || !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+            {
+                Orbwalker.ResetAutoAttack();
+                Core.DelayAction(CancelAnimation, T - Game.Ping);
+            }
+        }
+
+        private static void CancelAnimation()
+        {
+            Player.DoEmote(Emote.Dance);
+            Orbwalker.ResetAutoAttack();
         }
 
         private static float QDmg(AIHeroClient Target)

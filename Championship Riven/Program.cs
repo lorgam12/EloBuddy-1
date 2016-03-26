@@ -25,24 +25,36 @@ namespace Championship_Riven
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (Riven.Q.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawQ"))
             {
-                Circle.Draw(Color.DarkBlue, Riven.Q.Range, Player.Instance.Position);
+                if (Riven.Q.IsReady())
+                {
+                    Circle.Draw(Color.DarkBlue, Riven.Q.Range, Player.Instance.Position);
+                }
             }
 
-            if (Riven.W.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawW"))
             {
-                Circle.Draw(Color.DarkBlue, Riven.W.Range, Player.Instance.Position);
+                if (Riven.W.IsReady())
+                {
+                    Circle.Draw(Color.DarkBlue, Riven.W.Range, Player.Instance.Position);
+                }
             }
 
-            if (Riven.E.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawE"))
             {
-                Circle.Draw(Color.DarkBlue, Riven.E.Range, Player.Instance.Position);
+                if (Riven.E.IsReady())
+                {
+                    Circle.Draw(Color.DarkBlue, Riven.E.Range, Player.Instance.Position);
+                }
             }
 
-            if (Riven.R.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawR"))
             {
-                Circle.Draw(Color.DarkBlue, Riven.R2.Range, Player.Instance.Position);
+                if (Riven.R.IsReady())
+                {
+                    Circle.Draw(Color.DarkBlue, Riven.R2.Range, Player.Instance.Position);
+                }
             }
 
             if (Riven.FocusTarget != null)
