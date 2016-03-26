@@ -35,7 +35,7 @@ namespace Lolli_Poppy
             DamageIndicator.Initialize(GetTotalDamage);
         }
 
-        public static float GetTotalDamage(Obj_AI_Base T)
+        public static float GetTotalDamage(AIHeroClient T)
         {
             float Damage = 0f;
 
@@ -57,17 +57,17 @@ namespace Lolli_Poppy
             return Damage;
         }
 
-        public static float QDMG(Obj_AI_Base T)
+        public static float QDMG(AIHeroClient T)
         {
             return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 40, 65, 90, 115, 140 }[Q.Level] + 0.80f * Player.Instance.TotalAttackDamage + 0.06f * T.MaxHealth);
         }
 
-        public static float EDMG(Obj_AI_Base T)
+        public static float EDMG(AIHeroClient T)
         {
             return Player.Instance.CalculateDamageOnUnit(T, DamageType.Magical, new float[] { 50, 70, 90, 110, 130 }[E.Level] + 0.5f * Player.Instance.TotalMagicalDamage);
         }
 
-        public static float RDMG(Obj_AI_Base T)
+        public static float RDMG(AIHeroClient T)
         {
             return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 200, 300, 400 }[R.Level] + 0.9f * Player.Instance.TotalAttackDamage);
         }
@@ -77,7 +77,7 @@ namespace Lolli_Poppy
             if (!sender.IsEnemy || sender.IsDead || sender.IsZombie || sender == null)
                 return;
 
-            if(W.IsReady() || (W.IsInRange(args.End) || W.IsInRange(args.Start)))
+            if(W.IsReady() || (W.IsInRange(args.End) && W.IsInRange(args.Start)))
             {
                 var Enemy = (AIHeroClient)sender;
 
