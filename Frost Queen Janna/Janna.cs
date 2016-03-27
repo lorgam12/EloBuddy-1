@@ -40,9 +40,6 @@ namespace Frost_Queen_Janna
             if (sender.IsAlly || sender.IsMe || sender == null)
                 return;
 
-            if (!Q.IsInRange(args.End) && !Q.IsInRange(args.Start))
-                return;
-
             if(E.IsReady() || JannaMenu.CheckBox(JannaMenu.Shield, "UseShield"))
             {
                 var Allies = EntityManager.Heroes.Allies.Where(x => x.IsValid || x.IsValidTarget(E.Range)).OrderByDescending(x => JannaMenu.Slider(JannaMenu.Shield, "E/" + x.BaseSkinName));
@@ -51,22 +48,34 @@ namespace Frost_Queen_Janna
                 {
                     if (SpellSlot.Q == args.Slot || JannaMenu.CheckBox(JannaMenu.Shield, "E/" + sender.BaseSkinName + "/Q"))
                     {
-                        E.Cast(Ally);
+                        if(args.End == Ally.ServerPosition)
+                        {
+                            E.Cast(Ally);
+                        }
                     }
 
                     if (SpellSlot.W == args.Slot || JannaMenu.CheckBox(JannaMenu.Shield, "E/" + sender.BaseSkinName + "/W"))
                     {
-                        E.Cast(Ally);
+                        if (args.End == Ally.ServerPosition)
+                        {
+                            E.Cast(Ally);
+                        }
                     }
 
                     if (SpellSlot.E == args.Slot || JannaMenu.CheckBox(JannaMenu.Shield, "E/" + sender.BaseSkinName + "/E"))
                     {
-                        E.Cast(Ally);
+                        if (args.End == Ally.ServerPosition)
+                        {
+                            E.Cast(Ally);
+                        }
                     }
 
                     if (SpellSlot.R == args.Slot || JannaMenu.CheckBox(JannaMenu.Shield, "E/" + sender.BaseSkinName + "/R"))
                     {
-                        E.Cast(Ally);
+                        if (args.End == Ally.ServerPosition)
+                        {
+                            E.Cast(Ally);
+                        }
                     }
                 }
             }
@@ -89,18 +98,11 @@ namespace Frost_Queen_Janna
                         if(!Q.IsCharging)
                         {
                             Q.StartCharging();
-                        }else if(Q.Range == Q.MaximumRange)
+                        }else if(Q.Range == Q.MinimumRange)
                         {
-                            Q.Cast(sender.Position);
-                        }
-                        else
-                        {
-                            if (Q.IsCharging)
-                                return;
-
                             var QPred = Q.GetPrediction(sender);
 
-                            if(QPred.HitChance >= HitChance.Medium)
+                            if (QPred.HitChance >= HitChance.Medium)
                             {
                                 Q.Cast(QPred.CastPosition);
                             }
@@ -126,15 +128,8 @@ namespace Frost_Queen_Janna
                     {
                         Q.StartCharging();
                     }
-                    else if (Q.Range == Q.MaximumRange)
+                    else if (Q.Range == Q.MinimumRange)
                     {
-                        Q.Cast(sender.Position);
-                    }
-                    else
-                    {
-                        if (Q.IsCharging)
-                            return;
-
                         var QPred = Q.GetPrediction(sender);
 
                         if (QPred.HitChance >= HitChance.Medium)
@@ -176,10 +171,6 @@ namespace Frost_Queen_Janna
                         R.Cast();
                         Orbwalker.DisableMovement = true;
                     }
-                    else
-                    {
-                        Orbwalker.DisableMovement = false;
-                    }
                 }
             }
 
@@ -198,18 +189,11 @@ namespace Frost_Queen_Janna
                         {
                             Q.StartCharging();
                         }
-                        else if (Q.Range == Q.MaximumRange)
+                        else if (Q.Range == Q.MinimumRange)
                         {
-                            Q.Cast(Target.Position);
-                        }
-                        else
-                        {
-                            if (Q.IsCharging)
-                                return;
-
                             var QPred = Q.GetPrediction(Target);
 
-                            if (QPred.HitChance >= HitChance.High)
+                            if (QPred.HitChance >= HitChance.Medium)
                             {
                                 Q.Cast(QPred.CastPosition);
                             }

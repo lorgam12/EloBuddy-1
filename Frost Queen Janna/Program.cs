@@ -34,24 +34,36 @@ namespace Frost_Queen_Janna
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if(Janna.Q.IsReady() || JannaMenu.CheckBox(JannaMenu.Draw, "DrawQ"))
+            if(Janna.Q.IsReady())
             {
-                Drawing.DrawCircle(Player.Instance.Position, Janna.Q.MinimumRange, Color.DarkCyan);
+                if(JannaMenu.CheckBox(JannaMenu.Draw, "DrawQ"))
+                {
+                    Drawing.DrawCircle(Player.Instance.Position, Janna.Q.MinimumRange, Color.DarkCyan);
+                }
             }
 
             if(Janna.W.IsReady() || JannaMenu.CheckBox(JannaMenu.Draw, "DrawW"))
             {
-                Drawing.DrawCircle(Player.Instance.Position, Janna.W.Range, Color.DarkCyan);
+                if (JannaMenu.CheckBox(JannaMenu.Draw, "DrawW"))
+                {
+                    Drawing.DrawCircle(Player.Instance.Position, Janna.W.Range, Color.DarkCyan);
+                }
             }
 
             if(Janna.E.IsReady() || JannaMenu.CheckBox(JannaMenu.Draw, "DrawE"))
             {
-                Drawing.DrawCircle(Player.Instance.Position, Janna.E.Range, Color.DarkCyan);
+                if (JannaMenu.CheckBox(JannaMenu.Draw, "DrawE"))
+                {
+                    Drawing.DrawCircle(Player.Instance.Position, Janna.E.Range, Color.DarkCyan);
+                }
             }
 
             if(Janna.R.IsReady() || JannaMenu.CheckBox(JannaMenu.Draw, "DrawR"))
             {
-                Drawing.DrawCircle(Player.Instance.Position, Janna.R.Range, Color.DarkCyan);
+                if (JannaMenu.CheckBox(JannaMenu.Draw, "DrawR"))
+                {
+                    Drawing.DrawCircle(Player.Instance.Position, Janna.R.Range, Color.DarkCyan);
+                }
             }
         }
     }
