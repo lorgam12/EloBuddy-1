@@ -24,96 +24,103 @@ namespace Pool_Party_Graves
 
         public static void Load()
         {
-            Q = new Spell.Skillshot(SpellSlot.Q, 900, SkillShotType.Linear, 250, 2000, 100);
-            W = new Spell.Skillshot(SpellSlot.W, 950, SkillShotType.Circular, 250, 1650, 150);
+            Q = new Spell.Skillshot(SpellSlot.Q, 900, SkillShotType.Linear, 250, 2100, 100);
+            W = new Spell.Skillshot(SpellSlot.W, 950, SkillShotType.Circular, 250, 1500, 120);
             E = new Spell.Skillshot(SpellSlot.E, 450, SkillShotType.Linear);
             R = new Spell.Skillshot(SpellSlot.R, 1000, SkillShotType.Linear, 250, 2100, 100);
-            R2 = new Spell.Skillshot(SpellSlot.R, 1700, SkillShotType.Cone, 250, 2100, 120);
+            R2 = new Spell.Skillshot(SpellSlot.R, 1700, SkillShotType.Cone, 250, 2100, 100);
 
             Youmu = new Item((int)ItemId.Youmuus_Ghostblade);
 
-            DamageIndicator.Initialize(GetTotalDamage);
+            DamageIndicator.Initialize(DamageCombo);
             Game.OnTick += Game_OnTick;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
         }
 
-        public static float GetTotalDamage(Obj_AI_Base T)
+        private static float QDMG(AIHeroClient Target, bool Wall)
         {
+            if (Target == null)
+                return 0f;
+
+            if(!Wall)
+            {
+                return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, new float[] { 55, 70, 85, 100, 115 }[Q.Level - 1] + 0.75f * Player.Instance.FlatPhysicalDamageMod);
+            }
+
+            return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, new float[] { 80, 125, 170, 215, 260 }[Q.Level - 1] + new float[] { 0.4f, 0.6f, 0.8f, 1f, 1.2f }[Q.Level - 1] * Player.Instance.FlatPhysicalDamageMod);
+        }
+
+        private static float RDMG(AIHeroClient Target)
+        {
+            if (Target == null)
+                return 0f;
+
+            return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, new float[] { 250, 400, 550 }[R.Level - 1] + 1.5f * Player.Instance.FlatPhysicalDamageMod); 
+        }        
+
+        private static float DamageCombo(AIHeroClient Target)
+        {
+            if (Target == null)
+                return 0f;
+
             float Damage = 0f;
 
-            if (Q.IsReady())
+            if(Q.IsReady())
             {
-                Damage += QDMG(T);
+                Damage += QDMG(Target, false);
             }
 
-            if (W.IsReady())
+            if(R.IsReady())
             {
-                Damage += WDMG(T);
-            }
-
-            if (R.IsReady())
-            {
-                Damage += RDMG(T);
+                Damage += RDMG(Target);
             }
 
             return Damage;
         }
 
-        public static float QDMG(Obj_AI_Base T)
-        {
-            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 55, 70, 85, 100, 115 }[Q.Level] + 0.75f * Player.Instance.TotalAttackDamage);
-        }
-
-        public static float WDMG(Obj_AI_Base T)
-        {
-            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Magical, new float[] { 60, 110, 160, 210, 260 }[W.Level] + 0.6f * Player.Instance.TotalMagicalDamage);
-        }
-
-        public static float RDMG(Obj_AI_Base T)
-        {
-            return Player.Instance.CalculateDamageOnUnit(T, DamageType.Physical, new float[] { 250, 400, 550 }[R.Level] + 1.5f * Player.Instance.TotalAttackDamage);
-        }
-
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if (sender.IsMe)
+            if (sender.IsMe || sender.IsAlly || sender == null)
                 return;
 
-            if (sender.IsDead && sender.IsZombie)
+            if (!GravesMenu.CheckBox(GravesMenu.Misc, "Gapcloser"))
                 return;
 
-            if(e.Start == e.End)
+            var EPos = Player.Instance.ServerPosition + (Player.Instance.ServerPosition - sender.ServerPosition).Normalized() * 300;
+
+            if (W.IsReady())
             {
-                var WPred = W.GetPrediction(sender);
-
-                if(WPred.HitChance >= HitChance.High)
+                if(Player.Instance.Position.Distance(e.End) <= W.Range)
                 {
-                    W.Cast(WPred.UnitPosition);
+                    W.Cast(e.End);
                 }
             }
 
-            if(e.End == Player.Instance.Position)
+            if (e.End == Player.Instance.Position)
             {
-                var PosX = Player.Instance.Position.X / 2;
-                var PosY = Player.Instance.Position.Y;
-                var PosZ = Player.Instance.Position.Z;
-
-                Vector3 Loc = new Vector3(PosX, PosY, PosZ);
-
-                E.Cast((Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Loc, E.Range - 1).To3D() : Loc));
+                if(E.IsReady())
+                {
+                    E.Cast(EPos);
+                }
             }
         }
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
+            if (sender.IsMe || sender.IsAlly || sender == null)
+                return;
+            
             if (W.IsReady())
             {
                 var WPred = W.GetPrediction(sender);
 
-                if (WPred.HitChance >= HitChance.Medium)
+                if (WPred.HitChance >= HitChance.High)
                 {
-                    W.Cast(WPred.UnitPosition);
+                    if(sender.IsValidTarget(W.Range))
+                    {
+                        W.Cast(WPred.UnitPosition);
+                    }
                 }
             }
         }
@@ -130,16 +137,16 @@ namespace Pool_Party_Graves
 
             if(GravesMenu.CheckBox(GravesMenu.Misc, "UseRKs"))
             {
-                var TargetR = TargetSelector.GetTarget(R.Range, DamageType.Physical);
+                var Target = TargetSelector.GetTarget(R.Range, DamageType.Physical);
 
-                if (TargetR == null)
+                if (Target == null)
                     return;
 
-                if (TargetR.IsValidTarget(R.Range))
+                if (Target.IsValidTarget(R.Range))
                 {
-                    if(TargetR.Health <= RDMG(TargetR))
+                    if(Target.Health <= RDMG(Target))
                     {
-                        var RPred = R.GetPrediction(TargetR);
+                        var RPred = R.GetPrediction(Target);
 
                         if(RPred.HitChance >= HitChance.High)
                         {
@@ -151,32 +158,25 @@ namespace Pool_Party_Graves
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                var TargetQ = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
-                var TargetW = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-                var TargetE = TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                var TargetR = TargetSelector.GetTarget(R.Range, DamageType.Physical);
-                var TargetR2 = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
+                var Target = TargetSelector.GetTarget(R2.Range, DamageType.Physical);
 
-                if(GravesMenu.CheckBox(GravesMenu.Combo, "UseYoumu") && GravesMenu.Slider(GravesMenu.Combo, "UseYoumuX") >= TargetQ.HealthPercent)
+                if (Target == null)
+                    return;
+
+                if(GravesMenu.CheckBox(GravesMenu.Combo, "UseYoumu") && GravesMenu.Slider(GravesMenu.Combo, "UseYoumuX") >= Target.HealthPercent)
                 {
-                    if (TargetQ == null)
-                        return;
-
-                    if(Youmu.IsOwned() && Youmu.IsReady())
+                    if(Youmu.IsOwned() || Youmu.IsReady())
                     {
                         Youmu.Cast();
                     }
                 }
 
 
-                if (W.IsReady())
+                if (W.IsReady() || GravesMenu.CheckBox(GravesMenu.Combo, "UseWCombo"))
                 {
-                    if (TargetW == null)
-                        return;
-
-                    if (TargetW.IsValidTarget(W.Range))
+                    if (Target.IsValidTarget(W.Range))
                     {
-                        var WPred = W.GetPrediction(TargetW);
+                        var WPred = W.GetPrediction(Target);
 
                         if (WPred.HitChance >= HitChance.High)
                         {
@@ -185,39 +185,34 @@ namespace Pool_Party_Graves
                     }
                 }
 
-                if (Q.IsReady())
+                if (Q.IsReady() || GravesMenu.CheckBox(GravesMenu.Combo, "UseQCombo"))
                 {
-                    if (TargetQ == null)
-                        return;
-
-                    if (TargetQ.IsValidTarget(Q.Range))
+                    if (Target.IsValidTarget(Q.Range))
                     {
-                        var Check = TargetQ.BoundingRadius + TargetQ.Position.Extend(Player.Instance.Position, Q.Range);
-                        var QPred = Q.GetPrediction(TargetQ);
+                        var QPred = Q.GetPrediction(Target);
 
-                        if (Check.IsWall())
+                        for (int i = 0; i < 20; i++)
                         {
-                            if (QPred.HitChance >= HitChance.High)
+                            var Flags = NavMesh.GetCollisionFlags(QPred.UnitPosition);
+
+                            if(Flags.HasFlag(CollisionFlags.Wall))
                             {
                                 Q.Cast(QPred.UnitPosition);
                             }
-                        }
-                        else
-                        {
-                            if (QPred.HitChance >= HitChance.Medium)
+                            else
                             {
-                                Q.Cast(QPred.UnitPosition);
+                                if(QPred.HitChance >= HitChance.Medium)
+                                {
+                                    Q.Cast(QPred.UnitPosition);
+                                }
                             }
                         }
                     }
                 }
 
-                if (E.IsReady())
+                if (E.IsReady() || GravesMenu.CheckBox(GravesMenu.Combo, "UseECombo"))
                 {
-                    if (TargetE == null)
-                        return;
-
-                    if (TargetE.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange(TargetE)))
+                    if (Target.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange(Target)))
                     {
                         if(GravesMenu.CheckBox(GravesMenu.Combo, "UseEComboMouse"))
                         {
@@ -225,25 +220,18 @@ namespace Pool_Party_Graves
                         }
                         else if (GravesMenu.CheckBox(GravesMenu.Combo, "UseECombo"))
                         {
-                            E.Cast(TargetE.Position);
-                        }
-                        else
-                        {
-                            E.Cast((Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Game.CursorPos, E.Range - 1).To3D() : Game.CursorPos));
+                            E.Cast(Target.Position);
                         }
                     }
                 }
 
-                if (R.IsReady())
+                if (R.IsReady() || GravesMenu.CheckBox(GravesMenu.Combo, "UseRCombo"))
                 {
-                    if (TargetR == null)
-                        return;
-
-                    if (TargetR.IsValidTarget(R.Range))
+                    if (Target.IsValidTarget(R.Range))
                     {
-                        if (TargetR.Health < RDMG(TargetR))
+                        if (Target.Health < RDMG(Target))
                         {
-                            var RPred = R.GetPrediction(TargetR);
+                            var RPred = R.GetPrediction(Target);
 
                             if (RPred.HitChance >= HitChance.High)
                             {
@@ -253,15 +241,15 @@ namespace Pool_Party_Graves
                     }
                     else
                     {
-                        if (TargetR2.IsValidTarget(R.Range))
+                        if (Target.IsValidTarget(R2.Range))
                         {
-                            if (TargetR2.Health >= Player.Instance.GetSpellDamage(TargetR2, SpellSlot.R))
+                            if (Target.Health >= RDMG(Target))
                             {
-                                var RPred = R2.GetPrediction(TargetR2);
+                                var RPred = R2.GetPrediction(Target);
 
                                 if (RPred.HitChance >= HitChance.High)
                                 {
-                                    R2.Cast(TargetR2);
+                                    R2.Cast(RPred.UnitPosition);
                                 }
                             }
                         }
@@ -271,13 +259,13 @@ namespace Pool_Party_Graves
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
-                var Minion = EntityManager.MinionsAndMonsters.Minions.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && x.IsEnemy);
+                var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValid|| !x.IsDead);
                 var Minions = EntityManager.MinionsAndMonsters.GetLineFarmLocation(Minion, Q.Width, (int) Q.Range);
 
                 if (Minion == null)
                     return;
 
-                if(Q.IsReady() && GravesMenu.CheckBox(GravesMenu.Laneclear, "UseQLane"))
+                if(Q.IsReady() || GravesMenu.CheckBox(GravesMenu.Laneclear, "UseQLane"))
                 {
                     if (Minions.HitNumber >= GravesMenu.Slider(GravesMenu.Laneclear, "UseQLaneMin"))
                     {
@@ -285,7 +273,7 @@ namespace Pool_Party_Graves
                     }
                 }
 
-                if(E.IsReady() && GravesMenu.CheckBox(GravesMenu.Laneclear, "UseELane"))
+                if(E.IsReady() || GravesMenu.CheckBox(GravesMenu.Laneclear, "UseELane"))
                 {
                     if(!Player.Instance.HasBuff("gravesbasicattackammo2"))
                     {

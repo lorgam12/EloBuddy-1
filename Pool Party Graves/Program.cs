@@ -34,27 +34,27 @@ namespace Pool_Party_Graves
         private static void Drawing_OnDraw(EventArgs args)
         {
 
-            if(Graves.Q.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawQ"))
+            if(Graves.Q.IsReady() || GravesMenu.CheckBox(GravesMenu.Draw, "DrawQ"))
             {
                 Circle.Draw(Color.Blue, Graves.Q.Range, Player.Instance.Position);
             }
 
-            if (Graves.W.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawW"))
+            if (Graves.W.IsReady() || GravesMenu.CheckBox(GravesMenu.Draw, "DrawW"))
             {
                 Circle.Draw(Color.Orange, Graves.W.Range, Player.Instance.Position);
             }
 
-            if (Graves.E.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawE"))
+            if (Graves.E.IsReady() || GravesMenu.CheckBox(GravesMenu.Draw, "DrawE"))
             {
                 Circle.Draw(Color.Blue, Graves.E.Range, Player.Instance.Position);
             }
 
-            if (Graves.R.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawR"))
+            if (Graves.R.IsReady() || GravesMenu.CheckBox(GravesMenu.Draw, "DrawR"))
             {
                 Circle.Draw(Color.Orange, Graves.R.Range, Player.Instance.Position);
             }
 
-            if (Graves.R2.IsReady() && GravesMenu.CheckBox(GravesMenu.Draw, "DrawR2"))
+            if (Graves.R2.IsReady() || GravesMenu.CheckBox(GravesMenu.Draw, "DrawR2"))
             {
                 Circle.Draw(Color.Blue, Graves.R2.Range, Player.Instance.Position);
             }
