@@ -33,8 +33,8 @@ namespace Championship_Riven
             DamageToUnit = damageToUnit;
 
             DrawingColor = Color.DarkBlue;
-            HealthbarEnabled = RivenMenu.CheckBox(RivenMenu.Draw, "DrawDMG");
-            PercentEnabled = RivenMenu.CheckBox(RivenMenu.Draw, "DrawDMG");
+            HealthbarEnabled = RivenMenu.CheckBox(RivenMenu.Draw, "DrawDamage");
+            PercentEnabled = RivenMenu.CheckBox(RivenMenu.Draw, "DrawDamage");
             /*
             DrawingColor = Settings.colorHealth;
             HealthbarEnabled = Settings.DrawHealth;

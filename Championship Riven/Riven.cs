@@ -4,6 +4,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Notifications;
 using SharpDX;
 
 namespace Championship_Riven
@@ -20,7 +21,7 @@ namespace Championship_Riven
         public static Spell.Skillshot E;
         public static Spell.Active R;
         public static Spell.Skillshot R2;
-        public static Spell.Skillshot Flash;
+        public static Spell.Targeted Flash;
 
         public static Item Hydra;
         public static Item Tiamat;
@@ -36,13 +37,13 @@ namespace Championship_Riven
             R = new Spell.Active(SpellSlot.R);
             R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 125);
 
-            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name.Contains("summonerflash"))
+            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner1).Name == "SummonerFlash")
             {
-                Flash = new Spell.Skillshot(SpellSlot.Summoner1, 500, SkillShotType.Circular);
+                Flash = new Spell.Targeted(SpellSlot.Summoner1, 425);
             }
-            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name.Contains("summonerflash"))
+            else if (Player.Instance.Spellbook.GetSpell(SpellSlot.Summoner2).Name == "SummonerFlash")
             {
-                Flash = new Spell.Skillshot(SpellSlot.Summoner2, 500, SkillShotType.Circular);
+                Flash = new Spell.Targeted(SpellSlot.Summoner2, 425);
             }
 
             Hydra = new Item((int)ItemId.Ravenous_Hydra, 350);
@@ -59,6 +60,32 @@ namespace Championship_Riven
             Orbwalker.OnPostAttack += Orbwalker_OnPostAttack;
         }
 
+        private static bool HasHydra()
+        {
+            if (!RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                return false;
+
+            if (Hydra.IsOwned() || Hydra.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HasTiamat()
+        {
+            if (!RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                return false;
+
+            if (Tiamat.IsOwned() || Tiamat.IsReady())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private static bool CheckUlt()
         {
             if (Player.Instance.HasBuff("RivenFengShuiEngine"))
@@ -68,215 +95,35 @@ namespace Championship_Riven
             return false;
         }
 
-        /*private static void Burst()
+        private static void Burst()
         {
-            if(Flash.IsReady())
+            if(RivenMenu.ComboBox(RivenMenu.Burst, "BurstType") == 0)
             {
-                if(FocusTarget.IsValidTarget(E.Range + Flash.Range))
+                if (DamageTotal(FocusTarget) >= FocusTarget.Health)
                 {
-                    if(E.IsReady())
+                    if (FocusTarget.Distance(Player.Instance.Position) < Flash.Range + W.Range)
                     {
-                        Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                    }
-
-                    Flash.Cast(Game.CursorPos);
-
-                    if(W.IsReady() || R.IsReady() || FocusTarget.IsValidTarget(W.Range))
-                    {
-                        if(CheckUlt())
+                        if (W.IsReady() || R.IsReady() || E.IsReady())
                         {
-                            R.Cast();
-                        }
-                        Core.DelayAction(() => W.Cast(), 1);
-                    }
+                            E.Cast(FocusTarget.Position);
 
-                    if (CheckUlt())
-                    {
-                        if (FocusTarget.Health <= RDmg(FocusTarget))
-                        {
-                            var RPred = R2.GetPrediction(FocusTarget);
-
-                            if (RPred.HitChance >= HitChance.High)
+                            if (Flash.IsReady())
                             {
-                                R2.Cast(RPred.UnitPosition);
-                            }
-                        }
-                    }
-
-                }
-            }
-        }*/
-
-        private static void Combo()
-        {
-            if (FocusTarget == null)
-                return;
-
-            if (!RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
-            {
-                if (E.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
-                {
-                    if (Player.Instance.Distance(FocusTarget) < E.Range + Player.Instance.GetAutoAttackRange())
-                    {
-                        Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                    }
-                }
-
-                if (W.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
-                {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
-                    {
-                        if (Player.Instance.Distance(FocusTarget) < W.Range)
-                        {
-                            W.Cast();
-
-                            if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
-                            {
-                                Core.DelayAction(() => Tiamat.Cast(), 50);
+                                Flash.Cast(FocusTarget.Position);
                             }
 
-                            if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                            {
-                                Core.DelayAction(() => Hydra.Cast(), 50);
-                            }
-                        }
-                    }
-                }
-
-                if (R.IsReady() || !CheckUlt())
-                {
-                    if (FocusTarget.HealthPercent > RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
-                    {
-                        if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 0)
-                        {
-                            if(FocusTarget.HealthPercent <= 40)
+                            if (FocusTarget.IsValidTarget(W.Range))
                             {
                                 R.Cast();
-                            }
-                        }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
-                        {
-                            if(DamageTotal(FocusTarget) >= FocusTarget.Health)
-                            {
-                                R.Cast();
-                            }
-                        }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 2)
-                        {
-                            R.Cast();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                #region UseR No Animation
-
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
-                {
-                    if (W.IsReady() || R.IsReady())
-                    {
-                        if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
-                        {
-                            if (Player.Instance.Distance(FocusTarget) < W.Range)
-                            {
-                                if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
-                                {
-                                    if (!CheckUlt())
-                                    {
-                                        if (FocusTarget.HealthPercent > RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
-                                        {
-                                            R.Cast();
-                                        }
-                                        Core.DelayAction(() => W.Cast(), 50);
-
-                                        if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
-                                        {
-                                            Core.DelayAction(() => Tiamat.Cast(), 50);
-                                        }
-
-                                        if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                                        {
-                                            Core.DelayAction(() => Hydra.Cast(), 50);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (E.IsReady() || R.IsReady())
-                    {
-                        if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
-                        {
-                            if (Player.Instance.Distance(FocusTarget) < E.Range)
-                            {
-                                if (!CheckUlt())
-                                {
-                                    if (FocusTarget.HealthPercent > RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
-                                    {
-                                        R.Cast();
-                                    }
-                                    Core.DelayAction(() => Player.CastSpell(SpellSlot.E, FocusTarget.Position), 1);
-                                }
-                            }
-                        }
-                    }
-                }
-                #endregion
-
-                if (E.IsReady() || W.IsReady())
-                {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
-                    {
-                        if (Player.Instance.Distance(FocusTarget) < E.Range + W.Range)
-                        {
-                            Player.CastSpell(SpellSlot.E, FocusTarget.ServerPosition);
-
-                            if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
-                            {
-                                Core.DelayAction(() => W.Cast(), 1);
-
-                                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
-                                {
-                                    Core.DelayAction(() => Tiamat.Cast(), 50);
-                                }
-
-                                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                                {
-                                    Core.DelayAction(() => Hydra.Cast(), 50);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (E.IsReady())
-                    {
-                        if(RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
-                        {
-                            if (Player.Instance.Distance(FocusTarget) < E.Range)
-                            {
-                                Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                            }
-                        }
-                    }
-
-                    if(W.IsReady())
-                    {
-                        if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.ChampionName))
-                        {
-                            if (Player.Instance.Distance(FocusTarget) < W.Range)
-                            {
                                 W.Cast();
 
-                                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                                if (HasHydra())
                                 {
-                                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                                    Hydra.Cast();
                                 }
-
-                                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                                else if (HasTiamat())
                                 {
-                                    Core.DelayAction(() => Hydra.Cast(), 50);
+                                    Tiamat.Cast();
                                 }
                             }
                         }
@@ -284,17 +131,161 @@ namespace Championship_Riven
                 }
             }
         }
-
+        
         private static void Flee()
         {
-            if(Q.IsReady() || RivenMenu.CheckBox(RivenMenu.Flee, "UseQFlee"))
+            if(RivenMenu.CheckBox(RivenMenu.Flee, "UseQFlee"))
             {
-                Q.Cast(Game.CursorPos.Distance(Player.Instance.Position) > Q.Range ? Player.Instance.Position.Extend(Game.CursorPos, Q.Range - 1).To3D() : Game.CursorPos);
+                Q.Cast((Game.CursorPos.Distance(Player.Instance) > Q.Range ? Player.Instance.Position.Extend(Game.CursorPos, Q.Range - 1).To3D() : Game.CursorPos));
             }
 
-            if (E.IsReady() || RivenMenu.CheckBox(RivenMenu.Flee, "UseEFlee"))
+            if(RivenMenu.CheckBox(RivenMenu.Flee, "UseEFlee"))
             {
-                E.Cast(Game.CursorPos.Distance(Player.Instance.Position) > Q.Range ? Player.Instance.Position.Extend(Game.CursorPos, Q.Range - 1).To3D() : Game.CursorPos);
+                E.Cast((Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Game.CursorPos, E.Range - 1).To3D() : Game.CursorPos));
+            }
+        }
+
+        private static void Combo()
+        {
+            if (!R.IsReady())
+            {
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
+                {
+                    if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
+                    {
+                        Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                    }
+                }
+
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
+                {
+                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
+                    {
+                        W.Cast();
+
+                        if (HasHydra())
+                        {
+                            Hydra.Cast();
+                        }
+                        else if (HasTiamat())
+                        {
+                            Tiamat.Cast();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (Player.Instance.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
+                {
+                    if (CheckUlt())
+                        return;
+
+                    if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
+                    {
+                        if (DamageTotal(FocusTarget) >= FocusTarget.Health)
+                        {
+                            if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
+                            {
+                                if (FocusTarget.IsValidTarget(W.Range))
+                                {
+                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                                    {
+                                        if (W.IsReady())
+                                        {
+                                            if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
+                                            {
+                                                R.Cast();
+                                                W.Cast();
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (FocusTarget.IsValidTarget(E.Range))
+                                {
+                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
+                                    {
+                                        if (E.IsReady())
+                                        {
+                                            R.Cast();
+                                            Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                        }
+                                    }
+                                }
+                                else if (CountQ == 2)
+                                {
+                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+                                    {
+                                        if (Q.IsReady())
+                                        {
+                                            Q.Cast(FocusTarget.Position);
+                                            R.Cast();
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.Cast();
+                            }
+                        }
+                    }
+                    else if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 0)
+                    {
+                        if (FocusTarget.HealthPercent <= 40)
+                        {
+                            if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
+                            {
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
+                                {
+                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
+                                    {
+                                        R.Cast();
+                                        W.Cast();
+                                    }
+                                }
+                                else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
+                                {
+                                    if (FocusTarget.IsValidTarget(E.Range))
+                                    {
+                                        R.Cast();
+                                        Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.Cast();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
+                        {
+                            if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
+                            {
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
+                                {
+                                    R.Cast();
+                                    W.Cast();
+                                }
+                            }
+                            else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
+                            {
+                                if (FocusTarget.IsValidTarget(E.Range))
+                                {
+                                    R.Cast();
+                                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                }
+                            }
+                            else
+                            {
+                                R.Cast();
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -312,14 +303,14 @@ namespace Championship_Riven
                 {
                     W.Cast();
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    if (HasTiamat())
                     {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                        Tiamat.Cast();
                     }
 
-                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                    if (HasHydra())
                     {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
+                        Hydra.Cast();
                     }
                 }
             }
@@ -338,14 +329,14 @@ namespace Championship_Riven
                 {
                     W.Cast();
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    if (HasTiamat())
                     {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
+                        Tiamat.Cast();
                     }
 
-                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                    if (HasHydra())
                     {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
+                        Hydra.Cast();
                     }
                 }
             }
@@ -361,44 +352,44 @@ namespace Championship_Riven
             if (args.Msg != 0x202)
                 return;
 
-            FocusTarget = EntityManager.Heroes.Enemies.FindAll(x => !x.IsDead || x.IsValid || x.Distance(Game.CursorPos) < 3000 || x.IsVisible).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault();
+            FocusTarget = EntityManager.Heroes.Enemies.FindAll(x => !x.IsDead || x.IsValid || x.Distance(Game.CursorPos) < 3000 || x.IsVisible || !x.IsDead).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault();
         }
 
         private static void Orbwalker_OnPostAttack(AttackableUnit target, EventArgs args)
         {
-            if (!target.IsEnemy)
-                return;
-
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                if (Q.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
                 {
-                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    if (Q.IsReady())
                     {
-                        if (Youmuu.IsOwned() || Youmuu.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseYoumuu"))
+                        if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
                         {
-                            Core.DelayAction(() => Youmuu.Cast(), 50);
+                            if (Youmuu.IsOwned() || Youmuu.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseYoumuu"))
+                            {
+                                Youmuu.Cast();
+                            }
+
+                            if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                            {
+                                Q.Cast(target.Position);
+                            }
                         }
 
-                        if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                        if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
                         {
-                            Q.Cast(target.Position);
+                            if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                            {
+                                Q.Cast(target.Position);
+                            }
                         }
-                    }
 
-                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
-                    {
-                        if (Player.Instance.Distance(target) < Q.Range + Player.Instance.GetAutoAttackRange())
+                        if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
                         {
-                            Q.Cast(target.Position);
-                        }
-                    }
-
-                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
-                    {
-                        if(Player.Instance.Distance(FocusTarget) < Q.Range + Player.Instance.GetAutoAttackRange())
-                        {
-                            Q.Cast(target.Position.Distance(Player.Instance.Position) > Q.Range ? Player.Instance.Position.Extend(target.Position, Q.Range - 1).To3D() : target.Position);
+                            if (Player.Instance.Distance(FocusTarget) < Q.Range + Player.Instance.GetAutoAttackRange())
+                            {
+                                Q.Cast(target.Position);
+                            }
                         }
                     }
                 }
@@ -406,43 +397,48 @@ namespace Championship_Riven
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
-                if (Q.IsReady() || RivenMenu.CheckBox(RivenMenu.Laneclear, "UseQLane"))
+                if (RivenMenu.CheckBox(RivenMenu.Laneclear, "UseQLane"))
                 {
-                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    if (Q.IsReady())
                     {
-                        Q.Cast(target.Position);
-                    }
+                        if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
 
-                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
-                    {
-                        Q.Cast(target.Position);
-                    }
+                        if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
 
-                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
-                    {
-                        Q.Cast(target.Position);
+                        if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
                     }
                 }
             }
 
-
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
-                if (Q.IsReady() || RivenMenu.CheckBox(RivenMenu.Jungleclear, "UseQJG"))
+                if (RivenMenu.CheckBox(RivenMenu.Jungleclear, "UseQJG"))
                 {
-                    if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                    if (Q.IsReady())
                     {
-                        Q.Cast(target.Position);
-                    }
+                        if (CountQ == 0 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
 
-                    if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
-                    {
-                        Q.Cast(target.Position);
-                    }
+                        if (CountQ == 1 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
 
-                    if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
-                    {
-                        Q.Cast(target.Position);
+                        if (CountQ == 2 || !Orbwalker.IsAutoAttacking)
+                        {
+                            Q.Cast(target.Position);
+                        }
                     }
                 }
             }
@@ -458,63 +454,82 @@ namespace Championship_Riven
                 Player.Instance.SetSkinId(RivenMenu.Slider(RivenMenu.Misc, "SkinID"));
             }
 
-            if(Player.Instance.CountEnemiesInRange(W.Range) > RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
+            if(Player.Instance.CountEnemiesInRange(W.Range) >= RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
             {
                 W.Cast();
 
-                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                if (HasTiamat())
                 {
-                    Core.DelayAction(() => Tiamat.Cast(), 50);
+                    Tiamat.Cast();
                 }
 
-                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
+                if (HasHydra())
                 {
-                    Core.DelayAction(() => Hydra.Cast(), 50);
+                    Hydra.Cast();
                 }
             }
 
             if(Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                Combo();
+                if (FocusTarget == null || FocusTarget.Health == 0)
+                    return;
 
-                if(CheckUlt() || RivenMenu.CheckBox(RivenMenu.Combo, "UseR2Combo"))
+
+                if (RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
                 {
-                    if (!RivenMenu.CheckBox(RivenMenu.Combo, "R2/" + FocusTarget.BaseSkinName) || !R.IsReady())
-                        return;
+                    Burst();
 
-                    if (FocusTarget == null)
-                        return;
-
-                    if(RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 0)
-                    {
-                        if(Player.Instance.Distance(FocusTarget) < R2.Range)
-                        {
-                            if (FocusTarget.Health <= RDmg(FocusTarget))
-                            {
-                                var RPred = R2.GetPrediction(FocusTarget);
-
-                                if (RPred.HitChance >= HitChance.High)
-                                {
-                                    if(!FocusTarget.IsValidTarget(Player.Instance.GetAutoAttackRange()))
-                                    {
-                                        R2.Cast(RPred.UnitPosition);
-                                    }
-                                }
-                            }
-                        }
-                    }else if(RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 1)
+                    if (CheckUlt())
                     {
                         var RPred = R2.GetPrediction(FocusTarget);
 
-                        if (Player.Instance.Distance(FocusTarget) < R2.Range)
+                        if (RPred.HitChance >= HitChance.High)
                         {
+                            if (FocusTarget.Distance(Player.Instance.ServerPosition) >= 60)
+                            {
+                                R2.Cast(RPred.UnitPosition);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Combo();
+                }
+
+                if (RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 0)
+                {
+                    if (!CheckUlt())
+                        return;
+
+                    if (FocusTarget.IsValidTarget(R2.Range))
+                    {
+                        if (RDamage(FocusTarget, FocusTarget.Health) >= FocusTarget.Health)
+                        {
+                            var RPred = R2.GetPrediction(FocusTarget);
+
                             if (RPred.HitChance >= HitChance.High)
                             {
-                                if (FocusTarget.IsValidTarget(Player.Instance.GetAutoAttackRange()))
+                                if (FocusTarget.Distance(Player.Instance.Position) >= 60)
                                 {
                                     R2.Cast(RPred.UnitPosition);
                                 }
                             }
+                        }
+                    }
+                }
+                else if (RivenMenu.ComboBox(RivenMenu.Combo, "UseR2Type") == 1)
+                {
+                    if (!CheckUlt())
+                        return;
+
+                    if (FocusTarget.IsValidTarget(R2.Range))
+                    {
+                        var RPred = R2.GetPrediction(FocusTarget);
+
+                        if (FocusTarget.Distance(Player.Instance.Position) >= 60)
+                        {
+                            R2.Cast(RPred.UnitPosition);
                         }
                     }
                 }
@@ -534,12 +549,6 @@ namespace Championship_Riven
             {
                 Jungleclear();
             }
-
-            /*
-            if(RivenMenu.Keybind(RivenMenu.Combo, "BurstFlash"))
-            {
-                Burst();
-            }*/
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -547,55 +556,39 @@ namespace Championship_Riven
             if (sender.IsMe || sender.IsAlly || sender == null)
                 return;
 
-            if (!sender.IsValidTarget(R2.Range))
-                return;
+            var EPos = Player.Instance.ServerPosition + (Player.Instance.ServerPosition - sender.ServerPosition).Normalized() * 300;
 
-            if(E.IsReady())
+            if(Player.Instance.Distance(sender.ServerPosition) <= args.SData.CastRange)
             {
-
-                if (SpellSlot.Q == args.Slot)
+                if(args.Slot == SpellSlot.Q)
                 {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "E/" + sender.BaseSkinName + "/Q"))
+                    if(RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/Q"))
                     {
-                        if(RivenMenu.CheckBox(RivenMenu.Combo, "EToMouse"))
-                        {
-                            Player.CastSpell(SpellSlot.E, Game.CursorPos);
-                        }
-
-                        if(RivenMenu.CheckBox(RivenMenu.Combo, "EToBehind"))
-                        {
-                            var PosX = Player.Instance.Position.X / 2;
-                            var PosY = Player.Instance.Position.Y;
-                            var PosZ = Player.Instance.Position.Z;
-
-                            Vector3 Loc = new Vector3(PosX, PosY, PosZ);
-
-                            Player.CastSpell(SpellSlot.E, (Game.CursorPos.Distance(Player.Instance) > E.Range ? Player.Instance.Position.Extend(Loc, E.Range - 1).To3D() : Loc));
-                        }
+                        E.Cast(EPos);
                     }
                 }
 
-                if (SpellSlot.W == args.Slot)
+                if(args.Slot == SpellSlot.W)
                 {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "E/" + sender.BaseSkinName + "/W"))
+                    if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/W"))
                     {
-                        Player.CastSpell(SpellSlot.E, Game.CursorPos);
+                        E.Cast(EPos);
                     }
                 }
 
-                if (SpellSlot.E == args.Slot)
+                if(args.Slot == SpellSlot.E)
                 {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "E/" + sender.BaseSkinName + "/E"))
+                    if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/E"))
                     {
-                        Player.CastSpell(SpellSlot.E, Game.CursorPos);
+                        E.Cast(EPos);
                     }
                 }
 
-                if (SpellSlot.R == args.Slot)
+                if(args.Slot == SpellSlot.R)
                 {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "E/" + sender.BaseSkinName + "/R"))
+                    if (RivenMenu.CheckBox(RivenMenu.Shield, "E/" + sender.BaseSkinName + "/R"))
                     {
-                        Player.CastSpell(SpellSlot.E, Game.CursorPos);
+                        E.Cast(EPos);
                     }
                 }
             }
@@ -609,20 +602,13 @@ namespace Championship_Riven
             if (!RivenMenu.CheckBox(RivenMenu.Misc, "Gapcloser"))
                 return;
 
-            if(e.End == Player.Instance.Position || RivenMenu.CheckBox(RivenMenu.Misc, "GapcloserW"))
+            if(RivenMenu.CheckBox(RivenMenu.Misc, "GapcloserW"))
             {
-                if(Player.Instance.Distance(sender) < W.Range)
+                if (sender.IsValidTarget(W.Range))
                 {
-                    W.Cast();
-
-                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                    if(W.IsReady())
                     {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
-                    }
-
-                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                    {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
+                        W.Cast();
                     }
                 }
             }
@@ -636,18 +622,11 @@ namespace Championship_Riven
             if (!RivenMenu.CheckBox(RivenMenu.Misc, "Interrupter"))
                 return;
 
-            if(Player.Instance.Distance(sender) < W.Range || RivenMenu.CheckBox(RivenMenu.Misc, "InterrupterW"))
+            if(RivenMenu.CheckBox(RivenMenu.Misc, "InterrupterW"))
             {
-                W.Cast();
-
-                if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
+                if(sender.IsValidTarget(W.Range))
                 {
-                    Core.DelayAction(() => Tiamat.Cast(), 50);
-                }
-
-                if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                {
-                    Core.DelayAction(() => Hydra.Cast(), 50);
+                    W.Cast();
                 }
             }
         }
@@ -696,29 +675,9 @@ namespace Championship_Riven
                 case "Spell4a":
                     T = 0;
 
-                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
-                    {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
-                    }
-
-                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                    {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
-                    }
-
                     break;
                 case "Spell4b":
                     T = 150;
-
-                    if (Tiamat.IsOwned() || Tiamat.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseTiamat"))
-                    {
-                        Core.DelayAction(() => Tiamat.Cast(), 50);
-                    }
-
-                    if (Hydra.IsOwned() || Hydra.IsReady() || RivenMenu.CheckBox(RivenMenu.Combo, "UseHydra"))
-                    {
-                        Core.DelayAction(() => Hydra.Cast(), 50);
-                    }
 
                     break;
             }
@@ -736,81 +695,72 @@ namespace Championship_Riven
             Orbwalker.ResetAutoAttack();
         }
 
-        private static float QDmg(AIHeroClient Target)
+        public static float DamageTotal(AIHeroClient target)
         {
-            if (Target == null)
-                return 0f;
+            double dmg = 0;
+            var passiveStacks = 0;
 
-            return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, -10 + (Q.Level * 20) + (0.35f + (Q.Level * 0.05f)) * (Player.Instance.FlatPhysicalDamageMod + Player.Instance.BaseAttackDamage));
+            dmg += Q.IsReady()
+                ? QDamage(!CheckUlt()) * (3 - CountQ)
+                : 0;
+            passiveStacks += Q.IsReady()
+                ? (3 - CountQ)
+                : 0;
+
+            dmg += W.IsReady()
+                ? WDamage()
+                : 0;
+            passiveStacks += W.IsReady()
+                ? 1
+                : 0;
+            passiveStacks += E.IsReady()
+                ? 1
+                : 0;
+
+            dmg += PassiveDamage() * passiveStacks;
+            dmg += (R.IsReady() && !CheckUlt() && !Player.Instance.HasBuff("RivenFengShuiEngine")
+                ? Player.Instance.TotalAttackDamage * 1.2
+                : Player.Instance.TotalAttackDamage) * passiveStacks;
+
+            if (dmg < 10)
+            {
+                return 3 * Player.Instance.TotalAttackDamage;
+            }
+
+            dmg += R.IsReady() && !CheckUlt()
+                ? RDamage(target, Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, (float)dmg))
+                : 0;
+            return Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, (float)dmg);
         }
 
-        private static float WDmg(AIHeroClient Target)
+        public static float QDamage(bool useR = false)
         {
-            if (Target == null)
-                return 0f;
-
-            return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, new float[] { 50, 80, 110, 150, 170 }[W.Level - 1] + 1 * Player.Instance.FlatPhysicalDamageMod + Player.Instance.BaseAttackDamage);
+            return (float)(new double[] { 10, 30, 50, 70, 90 }[Q.Level - 1] +
+                            ((Riven.R.IsReady() && useR && !Player.Instance.HasBuff("RivenFengShuiEngine")
+                                ? Player.Instance.TotalAttackDamage * 1.2
+                                : Player.Instance.TotalAttackDamage) / 100) *
+                            new double[] { 40, 45, 50, 55, 60 }[Q.Level - 1]);
         }
 
-        private static float RDmg(AIHeroClient Target)
+        public static float WDamage()
         {
-            if (Target == null)
-                return 0f;
-
-            var x = (Target.MaxHealth - Target.Health) / Target.MaxHealth > 0.75f ? 0.75f : (Target.MaxHealth - Target.Health) / Target.MaxHealth;
-            var y = x * (8 / 3);
-            var z = new float[] { 80, 120, 160 }[R.Level - 1] + 0.6f * Player.Instance.FlatPhysicalDamageMod;
-
-            return Player.Instance.CalculateDamageOnUnit(Target, DamageType.Physical, z * (1 + y));
+            return (float)(new double[] { 50, 80, 110, 140, 170 }[W.Level - 1] +
+                            1 * ObjectManager.Player.FlatPhysicalDamageMod);
         }
 
-        public static float DamageTotal(AIHeroClient Target)
+        public static double PassiveDamage()
         {
-            float Damage = 0f;
-            float Passive = 0f;
-            
-            if(Player.Instance.Level >= 18)
-            {
-                Passive = 0.50f;
-            }else if(Player.Instance.Level >= 15)
-            {
-                Passive = 0.45f;
-            }else if(Player.Instance.Level >= 12)
-            {
-                Passive = 0.40f;
-            }else if(Player.Instance.Level >= 9)
-            {
-                Passive = 0.35f;
-            }else if(Player.Instance.Level >= 6)
-            {
-                Passive = 0.30f;
-            }else if(Player.Instance.Level >= 3)
-            {
-                Passive = 0.25f;
-            }
-            else
-            {
-                Passive = 0.20f;
-            }
+            return ((20 + ((Math.Floor((double)ObjectManager.Player.Level / 3)) * 5)) / 100) *
+                   (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod);
+        }
 
-            if(Q.IsReady())
-            {
-                Damage += QDmg(Target);
-            }
-
-            if (W.IsReady())
-            {
-                Damage += WDmg(Target);
-            }
-
-            if (R.IsReady())
-            {
-                Damage += RDmg(Target);
-            }
-
-            Damage += Player.Instance.GetAutoAttackDamage(Target) * (1 + Passive);
-
-            return Damage;
+        public static float RDamage(Obj_AI_Base target, double healthMod = 0)
+        {
+            if (!R.IsLearned) return 0;
+            var hpPercent = (target.Health - healthMod > 0 ? 1 : target.Health - healthMod) / target.MaxHealth;
+            return (float)((new double[] { 80, 120, 160 }[Riven.R.Level - 1]
+                             + 0.6 * Player.Instance.FlatPhysicalDamageMod) *
+                            (hpPercent < 25 ? 3 : (((100 - hpPercent) * 2.67) / 100) + 1));
         }
     }
 }

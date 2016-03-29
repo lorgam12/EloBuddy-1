@@ -1,5 +1,6 @@
 ﻿using System;
 using EloBuddy;
+using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
@@ -8,6 +9,8 @@ namespace Championship_Riven
 {
     class Program
     {
+        public static Text Status;
+
         static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
@@ -60,6 +63,11 @@ namespace Championship_Riven
             if (Riven.FocusTarget != null)
             {
                 Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
+            }
+
+            if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
+            {
+                Circle.Draw(Color.Red, Riven.Flash.Range + Riven.W.Range, Player.Instance.Position);
             }
         }
     }
