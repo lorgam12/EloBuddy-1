@@ -6,6 +6,8 @@ using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Notifications;
 using SharpDX;
+using EloBuddy.SDK.Menu;
+using EloBuddy.SDK.Menu.Values;
 
 namespace Championship_Riven
 {
@@ -103,7 +105,7 @@ namespace Championship_Riven
                 {
                     if (FocusTarget.Distance(Player.Instance.Position) < Flash.Range + W.Range)
                     {
-                        if (W.IsReady() || R.IsReady() || E.IsReady())
+                        if (W.IsReady() && R.IsReady() && E.IsReady())
                         {
                             E.Cast(FocusTarget.Position);
 
@@ -112,19 +114,23 @@ namespace Championship_Riven
                                 Flash.Cast(FocusTarget.Position);
                             }
 
-                            if (FocusTarget.IsValidTarget(W.Range))
+                            if(!Orbwalker.CanAutoAttack)
                             {
-                                R.Cast();
-                                W.Cast();
+                                if (HasTiamat())
+                                {
+                                    Tiamat.Cast();
+                                }
 
                                 if (HasHydra())
                                 {
                                     Hydra.Cast();
                                 }
-                                else if (HasTiamat())
-                                {
-                                    Tiamat.Cast();
-                                }
+                            }
+
+                            if (FocusTarget.IsValidTarget(W.Range))
+                            {
+                                R.Cast();
+                                W.Cast();
                             }
                         }
                     }
@@ -149,7 +155,7 @@ namespace Championship_Riven
         {
             if (!R.IsReady())
             {
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") && E.IsReady())
                 {
                     if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
                     {
@@ -157,19 +163,23 @@ namespace Championship_Riven
                     }
                 }
 
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
+                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") && W.IsReady())
                 {
-                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
+                    if (FocusTarget.IsValidTarget(W.Range))
                     {
-                        W.Cast();
+                        if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
+                        {
+                            Core.DelayAction(() => W.Cast(), 80);
 
-                        if (HasHydra())
-                        {
-                            Hydra.Cast();
-                        }
-                        else if (HasTiamat())
-                        {
-                            Tiamat.Cast();
+                            if (HasTiamat())
+                            {
+                                Tiamat.Cast();
+                            }
+
+                            if (HasHydra())
+                            {
+                                Hydra.Cast();
+                            }
                         }
                     }
                 }
@@ -178,7 +188,7 @@ namespace Championship_Riven
             {
                 if (Player.Instance.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
                 {
-                    if (CheckUlt())
+                    if (CheckUlt() || !RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
                         return;
 
                     if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
@@ -212,21 +222,13 @@ namespace Championship_Riven
                                         }
                                     }
                                 }
-                                else if (CountQ == 2)
-                                {
-                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseQCombo"))
-                                    {
-                                        if (Q.IsReady())
-                                        {
-                                            Q.Cast(FocusTarget.Position);
-                                            R.Cast();
-                                        }
-                                    }
-                                }
                             }
                             else
                             {
-                                R.Cast();
+                                if(FocusTarget.IsValidTarget(W.Range))
+                                {
+                                    R.Cast();
+                                }
                             }
                         }
                     }
@@ -255,7 +257,10 @@ namespace Championship_Riven
                             }
                             else
                             {
-                                R.Cast();
+                                if(FocusTarget.IsValidTarget(W.Range))
+                                {
+                                    R.Cast();
+                                }
                             }
                         }
                     }
@@ -265,10 +270,13 @@ namespace Championship_Riven
                         {
                             if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
                             {
-                                if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
+                                if(FocusTarget.IsValidTarget(W.Range))
                                 {
-                                    R.Cast();
-                                    W.Cast();
+                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
+                                    {
+                                        R.Cast();
+                                        W.Cast();
+                                    }
                                 }
                             }
                             else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
@@ -279,7 +287,10 @@ namespace Championship_Riven
                                     Player.CastSpell(SpellSlot.E, FocusTarget.Position);
                                 }
                             }
-                            else
+                        }
+                        else
+                        {
+                            if(FocusTarget.IsValidTarget(W.Range))
                             {
                                 R.Cast();
                             }
@@ -291,7 +302,7 @@ namespace Championship_Riven
 
         private static void Laneclear()
         {
-            var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValid || x.IsDead).OrderBy(x => x.IsValidTarget(W.Range));
+            var Minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValid || !x.IsDead || x.IsValidTarget(W.Range));
             var Minions = EntityManager.MinionsAndMonsters.GetCircularFarmLocation(Minion, Q.Range, (int)Q.Range);
 
             if (Minion == null)
@@ -302,16 +313,6 @@ namespace Championship_Riven
                 if (Minions.HitNumber >= RivenMenu.Slider(RivenMenu.Laneclear, "UseWLaneMin"))
                 {
                     W.Cast();
-
-                    if (HasTiamat())
-                    {
-                        Tiamat.Cast();
-                    }
-
-                    if (HasHydra())
-                    {
-                        Hydra.Cast();
-                    }
                 }
             }
         }
@@ -328,16 +329,6 @@ namespace Championship_Riven
                 if(Monsters.IsValidTarget(W.Range))
                 {
                     W.Cast();
-
-                    if (HasTiamat())
-                    {
-                        Tiamat.Cast();
-                    }
-
-                    if (HasHydra())
-                    {
-                        Hydra.Cast();
-                    }
                 }
             }
 
@@ -449,12 +440,20 @@ namespace Championship_Riven
             if (Player.Instance.IsDead)
                 return;
 
+            if(!Flash.IsReady())
+            {
+                if (RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
+                {
+                    RivenMenu.Burst["BurstAllowed"].Cast<KeyBind>().CurrentValue = false;
+                }
+            }
+
             if(RivenMenu.CheckBox(RivenMenu.Misc, "Skin"))
             {
                 Player.Instance.SetSkinId(RivenMenu.Slider(RivenMenu.Misc, "SkinID"));
             }
 
-            if(Player.Instance.CountEnemiesInRange(W.Range) >= RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
+            if(Player.Instance.CountEnemiesInRange(W.Range) == RivenMenu.Slider(RivenMenu.Combo, "W/Auto"))
             {
                 W.Cast();
 
@@ -474,8 +473,6 @@ namespace Championship_Riven
                 if (FocusTarget == null || FocusTarget.Health == 0)
                     return;
 
-
-                if (RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
                 {
                     Burst();
 
