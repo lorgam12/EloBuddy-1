@@ -473,6 +473,7 @@ namespace Championship_Riven
                 if (FocusTarget == null || FocusTarget.Health == 0)
                     return;
 
+                if (RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed") && Flash.IsReady())
                 {
                     Burst();
 
