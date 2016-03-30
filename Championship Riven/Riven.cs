@@ -153,130 +153,93 @@ namespace Championship_Riven
 
         private static void Combo()
         {
-            if (!R.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") && E.IsReady())
             {
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") && E.IsReady())
+                if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
                 {
-                    if (FocusTarget.IsValidTarget(E.Range + Player.Instance.GetAutoAttackRange()))
-                    {
-                        Player.CastSpell(SpellSlot.E, FocusTarget.Position);
-                    }
+                    Player.CastSpell(SpellSlot.E, FocusTarget.Position);
                 }
+            }
 
-                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") && W.IsReady())
+            if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") && W.IsReady())
+            {
+                if (FocusTarget.IsValidTarget(W.Range))
                 {
-                    if (FocusTarget.IsValidTarget(W.Range))
+                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
                     {
-                        if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
+                        Core.DelayAction(() => W.Cast(), 80);
+
+                        if (HasTiamat())
                         {
-                            Core.DelayAction(() => W.Cast(), 80);
+                            Tiamat.Cast();
+                        }
 
-                            if (HasTiamat())
-                            {
-                                Tiamat.Cast();
-                            }
-
-                            if (HasHydra())
-                            {
-                                Hydra.Cast();
-                            }
+                        if (HasHydra())
+                        {
+                            Hydra.Cast();
                         }
                     }
                 }
             }
-            else
-            {
-                if (Player.Instance.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
-                {
-                    if (CheckUlt() || !RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
-                        return;
 
-                    if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
+            if (Player.Instance.HealthPercent >= RivenMenu.Slider(RivenMenu.Combo, "DontR1"))
+            {
+                if (CheckUlt() || !RivenMenu.CheckBox(RivenMenu.Combo, "UseRCombo"))
+                    return;
+
+                if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 1)
+                {
+                    if (DamageTotal(FocusTarget) >= FocusTarget.Health)
                     {
-                        if (DamageTotal(FocusTarget) >= FocusTarget.Health)
+                        if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
                         {
-                            if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
+                            if (FocusTarget.IsValidTarget(W.Range))
                             {
-                                if (FocusTarget.IsValidTarget(W.Range))
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
                                 {
-                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo"))
+                                    if (W.IsReady())
                                     {
-                                        if (W.IsReady())
-                                        {
-                                            if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
-                                            {
-                                                R.Cast();
-                                                W.Cast();
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (FocusTarget.IsValidTarget(E.Range))
-                                {
-                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
-                                    {
-                                        if (E.IsReady())
+                                        if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
                                         {
                                             R.Cast();
-                                            Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                                            W.Cast();
                                         }
                                     }
                                 }
                             }
-                            else
+                            else if (FocusTarget.IsValidTarget(E.Range))
                             {
-                                if(FocusTarget.IsValidTarget(W.Range))
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo"))
                                 {
-                                    R.Cast();
-                                }
-                            }
-                        }
-                    }
-                    else if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 0)
-                    {
-                        if (FocusTarget.HealthPercent <= 40)
-                        {
-                            if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
-                            {
-                                if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
-                                {
-                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
-                                    {
-                                        R.Cast();
-                                        W.Cast();
-                                    }
-                                }
-                                else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
-                                {
-                                    if (FocusTarget.IsValidTarget(E.Range))
+                                    if (E.IsReady())
                                     {
                                         R.Cast();
                                         Player.CastSpell(SpellSlot.E, FocusTarget.Position);
                                     }
                                 }
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (FocusTarget.IsValidTarget(W.Range))
                             {
-                                if(FocusTarget.IsValidTarget(W.Range))
-                                {
-                                    R.Cast();
-                                }
+                                R.Cast();
                             }
                         }
                     }
-                    else
+                }
+                else if (RivenMenu.ComboBox(RivenMenu.Combo, "UseRType") == 0)
+                {
+                    if (FocusTarget.HealthPercent <= 40)
                     {
                         if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
                         {
                             if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
                             {
-                                if(FocusTarget.IsValidTarget(W.Range))
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName) || FocusTarget.IsValidTarget(W.Range))
                                 {
-                                    if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
-                                    {
-                                        R.Cast();
-                                        W.Cast();
-                                    }
+                                    R.Cast();
+                                    W.Cast();
                                 }
                             }
                             else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
@@ -290,10 +253,42 @@ namespace Championship_Riven
                         }
                         else
                         {
-                            if(FocusTarget.IsValidTarget(W.Range))
+                            if (FocusTarget.IsValidTarget(W.Range))
                             {
                                 R.Cast();
                             }
+                        }
+                    }
+                }
+                else
+                {
+                    if (RivenMenu.CheckBox(RivenMenu.Misc, "BrokenAnimations"))
+                    {
+                        if (RivenMenu.CheckBox(RivenMenu.Combo, "UseWCombo") || W.IsReady())
+                        {
+                            if (FocusTarget.IsValidTarget(W.Range))
+                            {
+                                if (RivenMenu.CheckBox(RivenMenu.Combo, "W/" + FocusTarget.BaseSkinName))
+                                {
+                                    R.Cast();
+                                    W.Cast();
+                                }
+                            }
+                        }
+                        else if (RivenMenu.CheckBox(RivenMenu.Combo, "UseECombo") || E.IsReady())
+                        {
+                            if (FocusTarget.IsValidTarget(E.Range))
+                            {
+                                R.Cast();
+                                Player.CastSpell(SpellSlot.E, FocusTarget.Position);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (FocusTarget.IsValidTarget(W.Range))
+                        {
+                            R.Cast();
                         }
                     }
                 }
