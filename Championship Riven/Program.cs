@@ -23,7 +23,6 @@ namespace Championship_Riven
             RivenMenu.Load();
             Riven.Load();
             Drawing.OnDraw += Drawing_OnDraw;
-            Chat.Print("Load v1.1");
         }
 
         private static void Drawing_OnDraw(EventArgs args)
