@@ -1,6 +1,5 @@
 ﻿using System;
 using EloBuddy;
-using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
@@ -24,6 +23,7 @@ namespace Championship_Riven
             RivenMenu.Load();
             Riven.Load();
             Drawing.OnDraw += Drawing_OnDraw;
+            Chat.Print("Load v1.1");
         }
 
         private static void Drawing_OnDraw(EventArgs args)
