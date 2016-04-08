@@ -27,6 +27,9 @@ namespace Championship_Riven
 
         private static void Drawing_OnDraw(EventArgs args)
         {
+            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawOFF"))
+                return;
+
             if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawQ"))
             {
                 if (Riven.Q.IsReady())
@@ -59,9 +62,12 @@ namespace Championship_Riven
                 }
             }
 
-            if (Riven.FocusTarget != null)
+            if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
             {
-                Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
+                if (Riven.FocusTarget != null)
+                {
+                    Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
+                }
             }
 
             if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))

@@ -26,22 +26,15 @@ namespace Championship_Riven
             Combo.Add("UseR2Combo", new CheckBox("Use R2?"));
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell W");
-            foreach(var Enemy in EntityManager.Heroes.Enemies)
-            {
-                Combo.Add("W/" + Enemy.BaseSkinName, new CheckBox(Enemy.ChampionName));
-            }
             Combo.Add("W/Auto", new Slider("Auto W if {0} Enemies <=", 2, 1, 5));
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R");
-            Combo.Add("UseRType", new ComboBox("Use R when", 1, "Normal Kill", "Hard Kill", "Always", "No use R"));
+            Combo.Add("UseRType", new ComboBox("Use R when", 1, "Normal Kill", "Hard Kill", "Always", "ForceR"));
+            Combo.Add("ForceR", new KeyBind("Force R", false, KeyBind.BindTypes.PressToggle, 'U'));
             Combo.Add("DontR1", new Slider("Dont R if Target HP {0}% <=", 25, 10, 50));
             Combo.AddSeparator(3);
             Combo.AddLabel("• Spell R2");
             Combo.Add("UseR2Type", new ComboBox("Use R2 when", 0, "Kill only", "Max damage"));
-            foreach (var Enemy in EntityManager.Heroes.Enemies)
-            {
-                Combo.Add("R2/" + Enemy.BaseSkinName, new CheckBox(Enemy.ChampionName));
-            }
 
             Shield = Principal.AddSubMenu("Shield", "Shield");
             Shield.AddLabel("• Spell E");
@@ -119,6 +112,7 @@ namespace Championship_Riven
             Draw.Add("DrawE", new CheckBox("Draw E"));
             Draw.Add("DrawR", new CheckBox("Draw R2"));
             Draw.Add("DrawDamage", new CheckBox("Draw Damage"));
+            Draw.Add("DrawOFF", new CheckBox("Draw OFF", false));
         }
 
         public static bool CheckBox(Menu m, string s)
