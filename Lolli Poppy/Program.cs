@@ -32,7 +32,6 @@ namespace Lolli_Poppy
             GameObject.OnDelete += GameObject_OnDelete;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffGain;
             Game.OnWndProc += Game_OnWndProc;
-            Chat.Print("Teste v0.1");
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
