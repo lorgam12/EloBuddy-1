@@ -72,7 +72,7 @@ namespace Championship_Riven
 
             if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
             {
-                Circle.Draw(Color.Red, Riven.Flash.Range + Riven.W.Range, Player.Instance.Position);
+                Circle.Draw(Color.Red, 800, Player.Instance.Position);
             }
         }
     }
