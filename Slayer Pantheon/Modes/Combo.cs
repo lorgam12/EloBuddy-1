@@ -44,10 +44,7 @@ namespace Slayer_Pantheon.Modes
 
                         if (EPred.HitChancePercent >= PantheonMenu.Slider(PantheonMenu.Principal, "EPred"))
                         {
-                            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState != 2)
-                            {
-                                Pantheon.E.Cast(EPred.UnitPosition);
-                            }
+                            Pantheon.E.Cast(EPred.UnitPosition);
                         }
                     }
                 }

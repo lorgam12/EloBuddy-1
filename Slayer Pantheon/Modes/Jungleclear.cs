@@ -42,10 +42,7 @@ namespace Slayer_Pantheon.Modes
                 {
                     if (Monster.IsValidTarget(Pantheon.E.Range))
                     {
-                        if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState == 1)
-                        {
-                            Pantheon.E.Cast(Monster);
-                        }
+                        Pantheon.E.Cast(Monster);
                     }
                 }
             }

@@ -35,6 +35,19 @@ namespace Slayer_Pantheon
             Game.OnUpdate += Game_OnUpdate;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+        }
+
+        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (args.SData.Name == "PantheonE")
+                {
+                    Orbwalker.DisableMovement = true;
+                    Core.DelayAction(() => Orbwalker.DisableMovement = false, 1550);
+                }
+            }
         }
 
         public static void Check()

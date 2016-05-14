@@ -39,10 +39,7 @@ namespace Slayer_Pantheon.Modes
                     {
                         if (Pantheon.E.IsReady())
                         {
-                            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState != 2)
-                            {
-                                Pantheon.E.Cast(Minion);
-                            }
+                            Pantheon.E.Cast(Minion);
                         }
                     }
                 }
