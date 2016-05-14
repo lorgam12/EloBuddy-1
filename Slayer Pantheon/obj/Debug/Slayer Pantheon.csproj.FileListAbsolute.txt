@@ -1,0 +1,12 @@
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\Slayer Pantheon.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\Slayer Pantheon.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\Slayer Pantheon.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\obj\Debug\Slayer Pantheon.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\obj\Debug\Slayer Pantheon.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Slayer Pantheon\obj\Debug\Slayer Pantheon.pdb

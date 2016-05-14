@@ -1,0 +1,14 @@
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\Victorious Elise\bin\Debug\Victorious Elise.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\Victorious Elise\obj\Debug\Victorious Elise.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\Victorious Elise.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\Victorious Elise.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\Victorious Elise.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\obj\Debug\Victorious Elise.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\obj\Debug\Victorious Elise.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Victorious Elise\obj\Debug\Victorious Elise.pdb

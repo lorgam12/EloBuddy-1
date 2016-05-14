@@ -1,0 +1,24 @@
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\Soul Reaver Draven.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Soul Reaver Draven\obj\Debug\Soul Reaver Draven.pdb

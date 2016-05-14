@@ -1,0 +1,12 @@
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\Template.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\Template.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\Template.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\obj\Debug\Template.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\obj\Debug\Template.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Template\obj\Debug\Template.pdb

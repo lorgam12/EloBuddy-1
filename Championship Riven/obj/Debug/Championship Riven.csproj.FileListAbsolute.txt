@@ -15,8 +15,9 @@ C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\Champions
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\EloBuddy.dll
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\EloBuddy.SDK.dll
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\SharpDX.dll
-C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\SharpDX.Direct3D9.dll
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\obj\Debug\Championship Riven.csprojResolveAssemblyReference.cache
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\obj\Debug\Championship Riven.exe
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\obj\Debug\Championship Riven.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Championship Riven\bin\Debug\SharpDX.Direct3D9.dll

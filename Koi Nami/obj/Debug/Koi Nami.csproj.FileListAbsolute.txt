@@ -1,0 +1,12 @@
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\Koi Nami.exe.config
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\Koi Nami.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\Koi Nami.pdb
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\EloBuddy.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\SharpDX.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\bin\Debug\EloBuddy.Sandbox.dll
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\obj\Debug\Koi Nami.csprojResolveAssemblyReference.cache
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\obj\Debug\Koi Nami.exe
+C:\Users\Lawiet\Documents\GitHub\EloBuddy\Koi Nami\obj\Debug\Koi Nami.pdb
