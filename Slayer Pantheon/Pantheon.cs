@@ -45,11 +45,11 @@ namespace Slayer_Pantheon
             {
                 if (new Version(string.Format("{0}.{1}.{2}.{3}", Try.Groups[1], Try.Groups[2], Try.Groups[3], Try.Groups[4])) > Assembly.GetExecutingAssembly().GetName().Version)
                 {
-                    Chat.Print("<font color ='#042722' This version is outdated </font> <font color='#ff0000'" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
+                    Chat.Print("<font color ='#042722'> This version is outdated </font> <font color='#ff0000'>" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
                 }
                 else
                 {
-                    Chat.Print("<font color ='#042722' Thanks for using </font> <font color='#00530a'" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
+                    Chat.Print("<font color ='#042722'> Thanks for using </font> <font color='#00530a'>" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
                 }
             }
         }
