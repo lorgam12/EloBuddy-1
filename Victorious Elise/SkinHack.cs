@@ -26,26 +26,26 @@ namespace Victorious_Elise
             if (EliseMenu.CheckBox(EliseMenu.Misc, "SkinHack"))
             {
                 Player.Instance.SetSkinId(EliseMenu.Slider(EliseMenu.Misc, "SkinID"));
+
+                if (Player.Instance.GetAutoAttackRange() > 225)
+                {
+                    if (Player.Instance.Model == "EliseSpider")
+                    {
+                        Player.Instance.SetModel("Elise");
+                    }
+                }
+                else if (Player.Instance.GetAutoAttackRange() < 230)
+                {
+                    if (Player.Instance.Model == "Elise")
+                    {
+                        Player.Instance.SetModel("EliseSpider");
+                    }
+                }
             }
 
             if (EliseMenu.Keybind(EliseMenu.Misc, "Reset"))
             {
                 Player.Instance.SetModel(Player.Instance.ChampionName);
-            }
-
-            if (Player.Instance.GetAutoAttackRange() > 225)
-            {
-                if (Player.Instance.Model == "EliseSpider")
-                {
-                    Player.Instance.SetModel("Elise");
-                }
-            }
-            else if (Player.Instance.GetAutoAttackRange() < 230)
-            {
-                if (Player.Instance.Model == "Elise")
-                {
-                    Player.Instance.SetModel("EliseSpider");
-                }
             }
         }
     }
