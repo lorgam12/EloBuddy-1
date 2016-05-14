@@ -47,7 +47,7 @@ namespace Koi_Nami
                         {
                             var Caster = (AIHeroClient)Missile.SpellCaster;
 
-                            if (Nami.E.IsReady() || NamiMenu.CheckBox(NamiMenu.Ally, Caster.ChampionName + "/E"))
+                            if (Nami.E.IsReady() && NamiMenu.CheckBox(NamiMenu.Ally, Caster.ChampionName + "/E"))
                             {
                                 if (Caster.IsValidTarget(Nami.E.Range))
                                 {

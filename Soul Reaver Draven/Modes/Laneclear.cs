@@ -22,7 +22,7 @@ namespace Soul_Reaver_Draven.Modes
 
             foreach(var Minion in Minions)
             {
-                if(Draven.Q.IsReady() || DravenMenu.CheckBox(DravenMenu.Laneclear, "Q"))
+                if(Draven.Q.IsReady() && DravenMenu.CheckBox(DravenMenu.Laneclear, "Q"))
                 {
                     if(Draven.AxesCount() < 2)
                     {

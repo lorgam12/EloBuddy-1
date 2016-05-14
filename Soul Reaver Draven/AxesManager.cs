@@ -22,7 +22,7 @@ namespace Soul_Reaver_Draven
         {
             foreach (var Axe in Axes)
             {
-                if (Axe.IsValid || !Axe.IsDead)
+                if (Axe.IsValid && !Axe.IsDead)
                 {
                     if (DravenMenu.ComboBox(DravenMenu.Axes, "Mode") == 0)
                     {

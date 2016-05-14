@@ -22,7 +22,7 @@ namespace Hextech_Annie.Modes
 
             foreach (var Minion in Minions)
             {
-                if(Annie.Q.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Lasthit, "Q"))
+                if(Annie.Q.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Lasthit, "Q"))
                 {
                     if(Minion.IsValidTarget(Annie.Q.Range))
                     {

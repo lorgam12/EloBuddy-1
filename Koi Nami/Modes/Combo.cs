@@ -18,7 +18,7 @@ namespace Koi_Nami.Modes
     {
         public static void Init()
         {
-            if(Nami.Q.IsReady() || NamiMenu.CheckBox(NamiMenu.Combo, "Q"))
+            if(Nami.Q.IsReady() && NamiMenu.CheckBox(NamiMenu.Combo, "Q"))
             {
                 if(Target().IsValidTarget(Nami.Q.Range))
                 {
@@ -31,7 +31,7 @@ namespace Koi_Nami.Modes
                 }
             }
 
-            if(Nami.R.IsReady() || NamiMenu.CheckBox(NamiMenu.Combo, "R"))
+            if(Nami.R.IsReady() && NamiMenu.CheckBox(NamiMenu.Combo, "R"))
             {
                 foreach(var x in EntityManager.Heroes.Enemies)
                 {

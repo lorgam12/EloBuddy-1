@@ -24,7 +24,7 @@ namespace Victorious_Elise.Modes
             {
                 if(Elise.CheckForm())
                 {
-                    if(Elise.Q.IsReady() || EliseMenu.CheckBox(EliseMenu.Laneclear, "Q"))
+                    if(Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Laneclear, "Q"))
                     {
                         if(Minion.IsValidTarget(Elise.Q.Range))
                         {
@@ -32,7 +32,7 @@ namespace Victorious_Elise.Modes
                         }
                     }
 
-                    if (Elise.W.IsReady() || EliseMenu.CheckBox(EliseMenu.Laneclear, "W"))
+                    if (Elise.W.IsReady() && EliseMenu.CheckBox(EliseMenu.Laneclear, "W"))
                     {
                         if (Minion.IsValidTarget(Elise.W.Range))
                         {
@@ -42,7 +42,7 @@ namespace Victorious_Elise.Modes
                 }
                 else
                 {
-                    if(Elise.Q2.IsReady() || EliseMenu.CheckBox(EliseMenu.Laneclear, "Q2"))
+                    if(Elise.Q2.IsReady() && EliseMenu.CheckBox(EliseMenu.Laneclear, "Q2"))
                     {
                         if(Minion.IsValidTarget(Elise.Q2.Range))
                         {
@@ -50,7 +50,7 @@ namespace Victorious_Elise.Modes
                         }
                     }
 
-                    if(Elise.W2.IsReady() || EliseMenu.CheckBox(EliseMenu.Laneclear, "W2"))
+                    if(Elise.W2.IsReady() && EliseMenu.CheckBox(EliseMenu.Laneclear, "W2"))
                     {
                         if(Minion.IsValidTarget(Player.Instance.GetAutoAttackRange()))
                         {
@@ -59,7 +59,7 @@ namespace Victorious_Elise.Modes
                     }
                 }
 
-                if (!Elise.Q.IsReady() || !Elise.W.IsReady())
+                if (!Elise.Q.IsReady() && !Elise.W.IsReady())
                 {
                     if (Elise.R.IsReady())
                     {
@@ -68,7 +68,7 @@ namespace Victorious_Elise.Modes
                 }
                 else
                 {
-                    if(!Elise.Q2.IsReady() || !Elise.W2.IsReady())
+                    if(!Elise.Q2.IsReady() && !Elise.W2.IsReady())
                     {
                         if(Elise.R.IsReady())
                         {

@@ -33,17 +33,17 @@ namespace Hextech_Annie
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (Annie.Q.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Draw, "Q"))
+            if (Annie.Q.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Draw, "Q"))
             {
                 Circle.Draw(Color.DarkBlue, Annie.Q.Range, Player.Instance.Position);
             }
 
-            if (Annie.W.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Draw, "W"))
+            if (Annie.W.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Draw, "W"))
             {
                 Circle.Draw(Color.DarkBlue, Annie.W.Range, Player.Instance.Position);
             }
 
-            if (Annie.R.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Draw, "R"))
+            if (Annie.R.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Draw, "R"))
             {
                 Circle.Draw(Color.DarkBlue, Annie.R.Range, Player.Instance.Position);
             }

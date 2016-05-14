@@ -24,7 +24,7 @@ namespace Soul_Reaver_Draven.Modes
             {
                 if(Monster.IsValidTarget(Draven.E.Range))
                 {
-                    if (Draven.Q.IsReady() || DravenMenu.CheckBox(DravenMenu.Jungleclear, "Q"))
+                    if (Draven.Q.IsReady() && DravenMenu.CheckBox(DravenMenu.Jungleclear, "Q"))
                     {
                         if (Draven.AxesCount() < 2)
                         {
@@ -32,7 +32,7 @@ namespace Soul_Reaver_Draven.Modes
                         }
                     }
 
-                    if(Draven.E.IsReady() || DravenMenu.CheckBox(DravenMenu.Jungleclear, "E"))
+                    if(Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Jungleclear, "E"))
                     {
                         Draven.E.Cast(Monster);
                     }

@@ -55,15 +55,15 @@ namespace Victorious_Elise
         {
             string RawVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/DownsecAkr/EloBuddy/master/" + Assembly.GetExecutingAssembly().GetName().Name + "/Properties/AssemblyInfo.cs");
             var Try = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match(RawVersion);
-            if (Try.Success)
+            if (!Try.Success)
             {
                 if (new Version(string.Format("{0}.{1}.{2}.{3}", Try.Groups[1], Try.Groups[2], Try.Groups[3], Try.Groups[4])) > Assembly.GetExecutingAssembly().GetName().Version)
                 {
-                    Chat.Print("<font color ='#042722' This version is outdated </font> <font color='#ff0000'" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
+                    Chat.Print("<font color ='#042722'> This version is outdated </font> <font color='#ff0000'>" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
                 }
                 else
                 {
-                    Chat.Print("<font color ='#042722' Thanks for using </font> <font color='#00530a'" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
+                    Chat.Print("<font color ='#042722'> Thanks for using </font> <font color='#00530a'>" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace Victorious_Elise
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
                 if(EliseMenu.CheckBox(EliseMenu.Misc, "Interrupter"))
                 {
@@ -105,7 +105,7 @@ namespace Victorious_Elise
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
                 if (EliseMenu.CheckBox(EliseMenu.Misc, "Gapcloser"))
                 {

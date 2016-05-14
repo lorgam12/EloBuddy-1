@@ -24,7 +24,7 @@ namespace Victorious_Elise.Modes
             {
                 if(Elise.CheckForm())
                 {
-                    if(Elise.Q.IsReady() || EliseMenu.CheckBox(EliseMenu.Lasthit, "Q"))
+                    if(Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Lasthit, "Q"))
                     {
                         if(Minion.Health - Damages.QDamage(Minion) <= 0)
                         {
@@ -34,7 +34,7 @@ namespace Victorious_Elise.Modes
                 }
                 else
                 {
-                    if (Elise.Q2.IsReady() || EliseMenu.CheckBox(EliseMenu.Lasthit, "Q2"))
+                    if (Elise.Q2.IsReady() && EliseMenu.CheckBox(EliseMenu.Lasthit, "Q2"))
                     {
                         if (Minion.Health - Damages.Q2Damage(Minion) <= 0)
                         {

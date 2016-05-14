@@ -22,7 +22,7 @@ namespace Victorious_Elise.Modes
 
             if(Elise.CheckForm())
             {
-                if (Elise.E.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "E"))
+                if (Elise.E.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "E"))
                 {
                     if (Target().IsValidTarget(Elise.E.Range))
                     {
@@ -35,7 +35,7 @@ namespace Victorious_Elise.Modes
                     }
                 }
 
-                if (Elise.Q.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "Q"))
+                if (Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "Q"))
                 {
                     if (Target().IsValidTarget(Elise.Q.Range))
                     {
@@ -43,7 +43,7 @@ namespace Victorious_Elise.Modes
                     }
                 }
 
-                if (Elise.W.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "W"))
+                if (Elise.W.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "W"))
                 {
                     if (Target().IsValidTarget(Elise.W.Range))
                     {
@@ -59,7 +59,7 @@ namespace Victorious_Elise.Modes
             {
                 // Spider Form
 
-                if (Elise.Q2.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "Q2"))
+                if (Elise.Q2.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "Q2"))
                 {
                     if (Target().IsValidTarget(Elise.Q2.Range))
                     {
@@ -67,7 +67,7 @@ namespace Victorious_Elise.Modes
                     }
                 }
 
-                if (Elise.W2.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "W2"))
+                if (Elise.W2.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "W2"))
                 {
                     if (Target().IsValidTarget(Player.Instance.GetAutoAttackRange()))
                     {
@@ -75,7 +75,7 @@ namespace Victorious_Elise.Modes
                     }
                 }
 
-                if (Elise.E2.IsReady() || EliseMenu.CheckBox(EliseMenu.Combo, "E2"))
+                if (Elise.E2.IsReady() && EliseMenu.CheckBox(EliseMenu.Combo, "E2"))
                 {
                     if (Target().IsValidTarget(Elise.E2.Range))
                     {

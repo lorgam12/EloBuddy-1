@@ -28,7 +28,7 @@ namespace Koi_Nami
 
         public static void Init()
         {
-            Q = new Spell.Skillshot(SpellSlot.Q, 875, SkillShotType.Circular, 500, int.MaxValue, 125);
+            Q = new Spell.Skillshot(SpellSlot.Q, 875, SkillShotType.Circular, 950, int.MaxValue, 200);
             W = new Spell.Targeted(SpellSlot.W, 725);
             E = new Spell.Targeted(SpellSlot.E, 800);
             R = new Spell.Skillshot(SpellSlot.R, 2200, SkillShotType.Linear, 250, 850, 260);
@@ -44,15 +44,15 @@ namespace Koi_Nami
         {
             string RawVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/DownsecAkr/EloBuddy/master/" + Assembly.GetExecutingAssembly().GetName().Name + "/Properties/AssemblyInfo.cs");
             var Try = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match(RawVersion);
-            if (Try.Success)
+            if (!Try.Success)
             {
                 if (new Version(string.Format("{0}.{1}.{2}.{3}", Try.Groups[1], Try.Groups[2], Try.Groups[3], Try.Groups[4])) > Assembly.GetExecutingAssembly().GetName().Version)
                 {
-                    Chat.Print("<font color ='#042722' This version is outdated </font> <font color='#ff0000'" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
+                    Chat.Print("<font color ='#042722'> This version is outdated </font> <font color='#ff0000'>" + Assembly.GetExecutingAssembly().GetName().Version + " </font>");
                 }
                 else
                 {
-                    Chat.Print("<font color ='#042722' Thanks for using </font> <font color='#00530a'" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
+                    Chat.Print("<font color ='#042722'> Thanks for using </font> <font color='#00530a'>" + Assembly.GetExecutingAssembly().GetName().Name + " </font>");
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace Koi_Nami
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if (sender.IsEnemy || sender.IsValid)
+            if (sender.IsEnemy && sender.IsValid)
             {
                 if(NamiMenu.CheckBox(NamiMenu.Misc, "Gapcloser"))
                 {
@@ -92,7 +92,7 @@ namespace Koi_Nami
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
                 if (NamiMenu.CheckBox(NamiMenu.Misc, "Interrupter"))
                 {

@@ -18,7 +18,7 @@ namespace Soul_Reaver_Draven.Modes
     {
         public static void Init()
         {
-            if (Draven.Q.IsReady() || DravenMenu.CheckBox(DravenMenu.Combo, "Q")) 
+            if (Draven.Q.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "Q")) 
             {
                 if (Target().IsValidTarget(Player.Instance.GetAutoAttackRange() + 70))
                 {
@@ -26,7 +26,7 @@ namespace Soul_Reaver_Draven.Modes
                 }
             }
 
-            if (Draven.E.IsReady() || DravenMenu.CheckBox(DravenMenu.Combo, "E"))
+            if (Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "E"))
             {
                 if(Target().IsValidTarget(Draven.E.Range))
                 {
@@ -39,6 +39,7 @@ namespace Soul_Reaver_Draven.Modes
                 }
             }
 
+            /*
             if (Draven.R.IsReady() || DravenMenu.CheckBox(DravenMenu.Combo, "R"))
             {
                 if(Target().IsValidTarget(Draven.R.Range))
@@ -53,12 +54,12 @@ namespace Soul_Reaver_Draven.Modes
                         }
                     }
                 }
-            }
+            }*/
         }
 
         public static AIHeroClient Target()
         {
-            return TargetSelector.GetTarget(Draven.R.Range, DamageType.Physical);
+            return TargetSelector.GetTarget(Draven.E.Range, DamageType.Physical);
         }
     }
 }

@@ -18,12 +18,12 @@ namespace Soul_Reaver_Draven.Modes
     {
         public static void Init()
         {
-            if(Draven.W.IsReady() || DravenMenu.CheckBox(DravenMenu.Flee, "W"))
+            if(Draven.W.IsReady() && DravenMenu.CheckBox(DravenMenu.Flee, "W"))
             {
                 Draven.W.Cast();
             }
 
-            if(Draven.E.IsReady() || DravenMenu.CheckBox(DravenMenu.Flee, "E"))
+            if(Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Flee, "E"))
             {
                 var Target = TargetSelector.GetTarget(Draven.E.Range, DamageType.Physical);
 

@@ -36,29 +36,29 @@ namespace Victorious_Elise
         {
             // Human Form
             
-            if(Elise.Q.IsReady() || EliseMenu.CheckBox(EliseMenu.Draw, "Q"))
+            if(Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "Q"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.Q.Range, Player.Instance.Position);
             }
 
-            if (Elise.W.IsReady() || EliseMenu.CheckBox(EliseMenu.Draw, "W"))
+            if (Elise.W.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "W"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.W.Range, Player.Instance.Position);
             }
 
-            if (Elise.E.IsReady() || EliseMenu.CheckBox(EliseMenu.Draw, "E"))
+            if (Elise.E.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "E"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.E.Range, Player.Instance.Position);
             }
 
             // Spider Form
 
-            if (Elise.Q2.IsReady() || EliseMenu.CheckBox(EliseMenu.Draw, "Q2"))
+            if (Elise.Q2.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "Q2"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.Q2.Range, Player.Instance.Position);
             }
 
-            if (Elise.E2.IsReady() || EliseMenu.CheckBox(EliseMenu.Draw, "E2"))
+            if (Elise.E2.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "E2"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.E2.Range, Player.Instance.Position);
             }

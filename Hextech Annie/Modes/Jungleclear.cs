@@ -22,7 +22,7 @@ namespace Hextech_Annie.Modes
 
             foreach (var Monster in Monsters)
             {
-                if(Annie.Q.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Jungleclear, "Q"))
+                if(Annie.Q.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Jungleclear, "Q"))
                 {
                     if(Monster.IsValidTarget(Annie.Q.Range))
                     {
@@ -30,7 +30,7 @@ namespace Hextech_Annie.Modes
                     }
                 }
 
-                if (Annie.W.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Jungleclear, "W"))
+                if (Annie.W.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Jungleclear, "W"))
                 {
                     if (Monster.IsValidTarget(Annie.W.Range))
                     {

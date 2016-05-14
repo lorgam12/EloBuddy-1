@@ -18,7 +18,7 @@ namespace Hextech_Annie.Modes
     {
         public static void Init()
         {
-            if(Annie.Q.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Combo, "Q"))
+            if(Annie.Q.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Combo, "Q"))
             {
                 if(Target().IsValidTarget(Annie.Q.Range))
                 {
@@ -26,7 +26,7 @@ namespace Hextech_Annie.Modes
                 }
             }
 
-            if (Annie.W.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Combo, "W"))
+            if (Annie.W.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Combo, "W"))
             {
                 if (Target().IsValidTarget(Annie.W.Range))
                 {
@@ -39,7 +39,7 @@ namespace Hextech_Annie.Modes
                 }
             }
 
-            if (Annie.R.IsReady() || AnnieMenu.CheckBox(AnnieMenu.Combo, "R"))
+            if (Annie.R.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Combo, "R"))
             {
                 if (Target().IsValidTarget(Annie.R.Range))
                 {
