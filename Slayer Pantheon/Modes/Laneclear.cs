@@ -39,7 +39,9 @@ namespace Slayer_Pantheon.Modes
                     {
                         if (Pantheon.E.IsReady())
                         {
-                            Pantheon.E.Cast(Minion);
+                            {
+                                Pantheon.E.Cast(Minion);
+                            }
                         }
                     }
                 }

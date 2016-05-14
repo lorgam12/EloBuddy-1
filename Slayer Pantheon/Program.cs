@@ -33,17 +33,17 @@ namespace Slayer_Pantheon
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if(Pantheon.Q.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Draw, "Q"))
+            if(Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Draw, "Q"))
             {
                 Circle.Draw(Color.LimeGreen, Pantheon.Q.Range, Player.Instance.Position);
             }
 
-            if (Pantheon.W.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Draw, "W"))
+            if (Pantheon.W.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Draw, "W"))
             {
                 Circle.Draw(Color.LimeGreen, Pantheon.W.Range, Player.Instance.Position);
             }
 
-            if (Pantheon.E.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Draw, "E"))
+            if (Pantheon.E.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Draw, "E"))
             {
                 Circle.Draw(Color.LimeGreen, Pantheon.E.Range, Player.Instance.Position);
             }

@@ -84,7 +84,7 @@ namespace Slayer_Pantheon
 
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if (sender.IsEnemy || sender.IsValid)
+            if (sender.IsEnemy && sender.IsValid)
             {
                 if (PantheonMenu.CheckBox(PantheonMenu.Misc, "Interrupter"))
                 {
@@ -101,7 +101,7 @@ namespace Slayer_Pantheon
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
                 if (PantheonMenu.CheckBox(PantheonMenu.Misc, "Gapcloser"))
                 {

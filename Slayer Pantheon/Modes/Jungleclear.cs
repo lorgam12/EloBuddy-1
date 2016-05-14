@@ -22,7 +22,7 @@ namespace Slayer_Pantheon.Modes
 
             foreach (var Monster in Monsters)
             {
-                if (Pantheon.Q.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "Q"))
+                if (Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "Q"))
                 {
                     if (Monster.IsValidTarget(Pantheon.Q.Range))
                     {
@@ -30,7 +30,7 @@ namespace Slayer_Pantheon.Modes
                     }
                 }
 
-                if (Pantheon.W.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "W"))
+                if (Pantheon.W.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "W"))
                 {
                     if (Monster.IsValidTarget(Pantheon.W.Range))
                     {
@@ -38,11 +38,14 @@ namespace Slayer_Pantheon.Modes
                     }
                 }
 
-                if (Pantheon.E.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "E"))
+                if (Pantheon.E.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Jungleclear, "E"))
                 {
                     if (Monster.IsValidTarget(Pantheon.E.Range))
                     {
-                        Pantheon.E.Cast(Monster);
+                        if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                        {
+                            Pantheon.E.Cast(Monster);
+                        }
                     }
                 }
             }

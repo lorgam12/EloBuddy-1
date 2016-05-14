@@ -20,7 +20,7 @@ namespace Slayer_Pantheon.Modes
         {
             if (Target() != null)
             {
-                if (Pantheon.Q.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Combo, "Q"))
+                if (Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Combo, "Q"))
                 {
                     if (Target().IsValidTarget(Pantheon.Q.Range))
                     {
@@ -28,7 +28,7 @@ namespace Slayer_Pantheon.Modes
                     }
                 }
 
-                if (Pantheon.W.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Combo, "W"))
+                if (Pantheon.W.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Combo, "W"))
                 {
                     if (Target().IsValidTarget(Pantheon.Q.Range))
                     {
@@ -36,7 +36,7 @@ namespace Slayer_Pantheon.Modes
                     }
                 }
 
-                if (Pantheon.E.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Combo, "E"))
+                if (Pantheon.E.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Combo, "E"))
                 {
                     if (Target().IsValidTarget(Pantheon.E.Range))
                     {
@@ -44,7 +44,10 @@ namespace Slayer_Pantheon.Modes
 
                         if (EPred.HitChancePercent >= PantheonMenu.Slider(PantheonMenu.Principal, "EPred"))
                         {
-                            Pantheon.E.Cast(EPred.UnitPosition);
+                            if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState != 2)
+                            {
+                                Pantheon.E.Cast(EPred.UnitPosition);
+                            }
                         }
                     }
                 }
