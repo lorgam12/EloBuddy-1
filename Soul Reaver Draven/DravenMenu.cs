@@ -28,17 +28,17 @@ namespace Soul_Reaver_Draven
             Principal = MainMenu.AddMenu("Draven", "Draven");
             Principal.AddLabel("Prediction:");
             Principal.Add("EPred", new Slider("E Hitchance: {0}%", 80, 20, 100));
-            //Principal.Add("RPred", new Slider("R Hitchance: {0}%", 80, 20, 100));
+            Principal.Add("RPred", new Slider("R Hitchance: {0}%", 80, 20, 100));
 
             Combo = Principal.AddSubMenu("Combo", "Combo");
             Combo.Add("Q", new CheckBox("Use Q"));
-            Combo.Add("W", new CheckBox("Use W"));
             Combo.Add("E", new CheckBox("Use E"));
-            //Combo.Add("R", new CheckBox("Use R"));
+            Combo.Add("R", new CheckBox("Use R"));
 
             Axes = Principal.AddSubMenu("Axes", "Axes");
-            Axes.Add("Mode", new ComboBox("Axes Catch Mode:", 0, "Cursor Range", "Player Range", "Always"));
-            Axes.Add("Range", new Slider("Set Catch Range: {0}", 350, 200, 600));
+            Axes.Add("Mode", new ComboBox("Axes Catch Mode:", 0, "Cursor Range", "Player Range"));
+            Axes.Add("Range", new Slider("Set Catch Range: {0}", 600, 250, 1000));
+            Axes.AddSeparator();
             Axes.Add("Pick", new ComboBox("Pick Axes Mode:", 1, "Combo Mode", "Always", "Manual"));
             Axes.Add("Delay", new Slider("Humanizer: {0} Delay", 250, 0, 350));
 
@@ -63,7 +63,7 @@ namespace Soul_Reaver_Draven
 
             Draw = Principal.AddSubMenu("Draw", "Draw");
             Draw.Add("E", new CheckBox("Draw E"));
-            //Draw.Add("Axes", new CheckBox("Draw Axes"));
+            Draw.Add("Axes", new CheckBox("Draw Axes"));
             Draw.Add("Catch", new CheckBox("Draw Catch Range"));
         }
 

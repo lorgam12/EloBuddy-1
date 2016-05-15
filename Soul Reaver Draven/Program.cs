@@ -33,6 +33,16 @@ namespace Soul_Reaver_Draven
 
         private static void Drawing_OnDraw(EventArgs args)
         {
+            if (DravenMenu.CheckBox(DravenMenu.Draw, "Axes"))
+            {
+                var Axe = AxesManager.Axes.Where(x => x.Axe.IsValid).FirstOrDefault();
+
+                if (Axe != null)
+                {
+                    Circle.Draw(Color.Lime, 120, Axe.Axe.Position);
+                }
+            }
+
             if(Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Draw, "E"))
             {
                 Circle.Draw(Color.DarkBlue, Draven.E.Range, Player.Instance.Position);

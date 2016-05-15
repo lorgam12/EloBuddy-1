@@ -18,48 +18,50 @@ namespace Soul_Reaver_Draven.Modes
     {
         public static void Init()
         {
-            if (Draven.Q.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "Q")) 
+            if (Target() != null)
             {
-                if (Target().IsValidTarget(Player.Instance.GetAutoAttackRange() + 70))
+                if (Draven.Q.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "Q"))
                 {
-                    Draven.Q.Cast();
-                }
-            }
-
-            if (Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "E"))
-            {
-                if(Target().IsValidTarget(Draven.E.Range))
-                {
-                    var EPred = Draven.E.GetPrediction(Target());
-
-                    if (EPred.HitChancePercent >= DravenMenu.Slider(DravenMenu.Principal, "EPred"))
+                    if (Target().IsValidTarget(Player.Instance.GetAutoAttackRange() + 70))
                     {
-                        Draven.E.Cast(EPred.UnitPosition);
+                        Draven.Q.Cast();
                     }
                 }
-            }
 
-            /*
-            if (Draven.R.IsReady() || DravenMenu.CheckBox(DravenMenu.Combo, "R"))
-            {
-                if(Target().IsValidTarget(Draven.R.Range))
+                if (Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "E"))
                 {
-                    var RPred = Draven.R.GetPrediction(Target());
-
-                    if (RPred.HitChancePercent >= DravenMenu.Slider(DravenMenu.Principal, "RPred"))
+                    if (Target().IsValidTarget(Draven.E.Range))
                     {
-                        if (Target().Health <= Damages.RDamage(Target()) * 1.2)
+                        var EPred = Draven.E.GetPrediction(Target());
+
+                        if (EPred.HitChancePercent >= DravenMenu.Slider(DravenMenu.Principal, "EPred"))
                         {
-                            Draven.R.Cast(RPred.UnitPosition);
+                            Draven.E.Cast(EPred.UnitPosition);
                         }
                     }
                 }
-            }*/
+
+                if (Draven.R.IsReady() && DravenMenu.CheckBox(DravenMenu.Combo, "R"))
+                {
+                    if (Target().IsValidTarget(Draven.R.Range))
+                    {
+                        var RPred = Draven.R.GetPrediction(Target());
+
+                        if (RPred.HitChancePercent >= DravenMenu.Slider(DravenMenu.Principal, "RPred"))
+                        {
+                            if (Target().Health <= Damages.RDamage(Target()))
+                            {
+                                Draven.R.Cast(RPred.UnitPosition);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static AIHeroClient Target()
         {
-            return TargetSelector.GetTarget(Draven.E.Range, DamageType.Physical);
+            return TargetSelector.GetTarget(Draven.R.Range, DamageType.Physical);
         }
     }
 }

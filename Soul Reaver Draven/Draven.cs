@@ -31,14 +31,14 @@ namespace Soul_Reaver_Draven
             Q = new Spell.Active(SpellSlot.Q);
             W = new Spell.Active(SpellSlot.W);
             E = new Spell.Skillshot(SpellSlot.E, 1050, SkillShotType.Linear, 250, 1400, 130);
-            R = new Spell.Skillshot(SpellSlot.R, 2000, SkillShotType.Linear);
+            R = new Spell.Skillshot(SpellSlot.R, 1800, SkillShotType.Linear, 250, 2000, 160);
 
             Check();
             Game.OnTick += Game_OnUpdate;
             Interrupter.OnInterruptableSpell += Interrupter_OnInterruptableSpell;
             Gapcloser.OnGapcloser += Gapcloser_OnGapcloser;
-            GameObject.OnCreate += GameObject_OnCreate;
-            GameObject.OnDelete += GameObject_OnDelete;
+            GameObject.OnCreate += AxesManager.GameObject_OnCreate;
+            GameObject.OnDelete += AxesManager.GameObject_OnDelete;
         }
 
         public static void Check()
@@ -92,27 +92,11 @@ namespace Soul_Reaver_Draven
             }
         }
 
-        private static void GameObject_OnCreate(GameObject sender, EventArgs args)
-        {
-            if (sender.Name.Equals("Draven_Base_Q_reticle_self.troy"))
-            {
-                AxesManager.Axes.Add(sender);
-            }
-        }
-
-        private static void GameObject_OnDelete(GameObject sender, EventArgs args)
-        {
-            if (sender.Name.Equals("Draven_Base_Q_reticle_self.troy"))
-            {
-                AxesManager.Axes.Remove(sender);
-            }
-        }
-
         private static void Interrupter_OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
-                if(E.IsReady() || DravenMenu.CheckBox(DravenMenu.Misc, "Interrupter"))
+                if(E.IsReady() && DravenMenu.CheckBox(DravenMenu.Misc, "Interrupter"))
                 {
                     var EPred = E.GetPrediction(sender);
 
@@ -126,9 +110,9 @@ namespace Soul_Reaver_Draven
 
         private static void Gapcloser_OnGapcloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs e)
         {
-            if(sender.IsEnemy || sender.IsValid)
+            if(sender.IsEnemy && sender.IsValid)
             {
-                if (E.IsReady() || DravenMenu.CheckBox(DravenMenu.Misc, "Gapcloser"))
+                if (E.IsReady() && DravenMenu.CheckBox(DravenMenu.Misc, "Gapcloser"))
                 {
                     var EPred = E.GetPrediction(sender);
 
