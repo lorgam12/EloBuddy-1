@@ -42,7 +42,7 @@ namespace Slayer_Pantheon
         {
             if (sender.IsMe)
             {
-                if (args.SData.Name == "PantheonE")
+                if (args.Slot == SpellSlot.E)
                 {
                     Orbwalker.DisableMovement = true;
                     Core.DelayAction(() => Orbwalker.DisableMovement = false, 1550);

@@ -22,7 +22,7 @@ namespace Slayer_Pantheon.Modes
 
             foreach (var Minion in Minions)
             {
-                if (Pantheon.Q.IsReady() || PantheonMenu.CheckBox(PantheonMenu.Lasthit, "Q"))
+                if (Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Lasthit, "Q"))
                 {
                     if (Minion.IsValidTarget(Pantheon.Q.Range))
                     {
