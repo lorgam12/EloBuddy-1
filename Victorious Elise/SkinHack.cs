@@ -18,13 +18,13 @@ namespace Victorious_Elise
     {
         public static void Init()
         {
-            foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Equals("Spiderling") && x.IsValid && !x.IsDead))
-            {
-                x.SetSkinId(EliseMenu.Slider(EliseMenu.Misc, "SkinID"));
-            }
-
             if (EliseMenu.CheckBox(EliseMenu.Misc, "SkinHack"))
             {
+                foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.Equals("Spiderling") && x.IsValid && !x.IsDead))
+                {
+                    x.SetSkinId(EliseMenu.Slider(EliseMenu.Misc, "SkinID"));
+                }
+
                 Player.Instance.SetSkinId(EliseMenu.Slider(EliseMenu.Misc, "SkinID"));
 
                 if (Player.Instance.GetAutoAttackRange() > 225)

@@ -79,7 +79,6 @@ namespace Victorious_Elise
             Misc.Add("SkinHack", new CheckBox("SkinHack?", false));
             Misc.Add("SkinID", new Slider("Skin ID: {0}", 2, 0, 4));
             Misc.Add("Reset", new KeyBind("Reset (Skin Bug)", false, KeyBind.BindTypes.HoldActive, 'T'));
-            Misc.Add("Bug", new KeyBind("Nothing", false, KeyBind.BindTypes.HoldActive, 'R'));
 
             Draw = Principal.AddSubMenu("Draw", "Draw");
             Draw.AddLabel("Human Form:");
