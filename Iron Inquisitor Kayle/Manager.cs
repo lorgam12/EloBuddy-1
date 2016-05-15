@@ -81,7 +81,10 @@ namespace Iron_Inquisitor_Kayle
                             {
                                 if (Ally.HealthPercent <= KayleMenu.Slider(KayleMenu.Manage, "MinWAlly"))
                                 {
-                                    Kayle.W.Cast(Ally);
+                                    if (!Ally.IsRecalling())
+                                    {
+                                        Kayle.W.Cast(Ally);
+                                    }
                                 }
                             }
                         }
@@ -89,7 +92,10 @@ namespace Iron_Inquisitor_Kayle
                         {
                             if (Player.Instance.HealthPercent <= KayleMenu.Slider(KayleMenu.Manage, "MinW"))
                             {
-                                Kayle.W.Cast(Player.Instance);
+                                if (!Player.Instance.IsRecalling())
+                                {
+                                    Kayle.W.Cast(Player.Instance);
+                                }
                             }
                         }
                     }
@@ -102,7 +108,10 @@ namespace Iron_Inquisitor_Kayle
                             {
                                 if (Ally.HealthPercent <= KayleMenu.Slider(KayleMenu.Manage, "MinRAlly"))
                                 {
-                                    Kayle.R.Cast(Ally);
+                                    if (!Ally.IsRecalling())
+                                    {
+                                        Kayle.R.Cast(Ally);
+                                    }
                                 }
                             }
                         }
@@ -110,7 +119,10 @@ namespace Iron_Inquisitor_Kayle
                         {
                             if (Player.Instance.HealthPercent <= KayleMenu.Slider(KayleMenu.Manage, "MinR"))
                             {
-                                Kayle.R.Cast(Player.Instance);
+                                if (!Ally.IsRecalling())
+                                {
+                                    Kayle.R.Cast(Player.Instance);
+                                }
                             }
                         }
                     }
