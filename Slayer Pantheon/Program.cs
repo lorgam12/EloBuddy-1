@@ -25,15 +25,15 @@ namespace Slayer_Pantheon
         {
             if (Player.Instance.Hero != Champion.Pantheon)
                 return;
-
+			
             PantheonMenu.Init();
             Pantheon.Init();
             Drawing.OnDraw += Drawing_OnDraw;
         }
-
-        private static void Drawing_OnDraw(EventArgs args)
+		
+		private static void Drawing_OnDraw(EventArgs args)
         {
-            if(Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Draw, "Q"))
+            if (Pantheon.Q.IsReady() && PantheonMenu.CheckBox(PantheonMenu.Draw, "Q"))
             {
                 Circle.Draw(Color.LimeGreen, Pantheon.Q.Range, Player.Instance.Position);
             }

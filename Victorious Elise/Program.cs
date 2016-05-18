@@ -25,18 +25,17 @@ namespace Victorious_Elise
         {
             if (Player.Instance.Hero != Champion.Elise)
                 return;
-
+			
             EliseMenu.Init();
             Elise.Init();
-
-            Drawing.OnDraw += Drawing_OnDraw;
-        }
-
-        private static void Drawing_OnDraw(EventArgs args)
+            Drawing.OnDraw += Drawing_OnDraw;        
+		}
+    
+		private static void Drawing_OnDraw(EventArgs args)
         {
             // Human Form
-            
-            if(Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "Q"))
+
+            if (Elise.Q.IsReady() && EliseMenu.CheckBox(EliseMenu.Draw, "Q"))
             {
                 Circle.Draw(Color.DeepSkyBlue, Elise.Q.Range, Player.Instance.Position);
             }
@@ -65,11 +64,11 @@ namespace Victorious_Elise
 
             // Cooldown
 
-            if (EliseMenu.CheckBox(EliseMenu.Draw, "Cooldowns")) 
+            if (EliseMenu.CheckBox(EliseMenu.Draw, "Cooldowns"))
             {
                 var Center = Drawing.WorldToScreen(Player.Instance.Position);
 
-                if(!Elise.CheckForm())
+                if (!Elise.CheckForm())
                 {
                     //Drawing.DrawLine(PosX, PosX + 150, 3, System.Drawing.Color.Red);
 
@@ -93,7 +92,7 @@ namespace Victorious_Elise
 
                     if (Cooldowns._HECD == 0)
                     {
-                        Drawing.DrawText(Center[0]  +60, Center[1], System.Drawing.Color.LimeGreen, "Human (E) - OK");
+                        Drawing.DrawText(Center[0] + 60, Center[1], System.Drawing.Color.LimeGreen, "Human (E) - OK");
                     }
                     else
                     {
@@ -131,5 +130,5 @@ namespace Victorious_Elise
                 }
             }
         }
-    }
+	}
 }

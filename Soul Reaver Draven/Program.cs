@@ -28,10 +28,10 @@ namespace Soul_Reaver_Draven
 
             DravenMenu.Init();
             Draven.Init();
-            Drawing.OnDraw += Drawing_OnDraw;
+			Drawing.OnDraw += Drawing_OnDraw;
         }
-
-        private static void Drawing_OnDraw(EventArgs args)
+		
+		private static void Drawing_OnDraw(EventArgs args)
         {
             if (DravenMenu.CheckBox(DravenMenu.Draw, "Axes"))
             {
@@ -43,17 +43,18 @@ namespace Soul_Reaver_Draven
                 }
             }
 
-            if(Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Draw, "E"))
+            if (Draven.E.IsReady() && DravenMenu.CheckBox(DravenMenu.Draw, "E"))
             {
                 Circle.Draw(Color.DarkBlue, Draven.E.Range, Player.Instance.Position);
             }
 
-            if(DravenMenu.CheckBox(DravenMenu.Draw, "Catch"))
+            if (DravenMenu.CheckBox(DravenMenu.Draw, "Catch"))
             {
                 if (DravenMenu.ComboBox(DravenMenu.Axes, "Mode") == 0)
                 {
                     Circle.Draw(Color.LimeGreen, DravenMenu.Slider(DravenMenu.Axes, "Range"), Game.CursorPos);
-                }else if(DravenMenu.ComboBox(DravenMenu.Axes, "Mode") == 1)
+                }
+                else if (DravenMenu.ComboBox(DravenMenu.Axes, "Mode") == 1)
                 {
                     Circle.Draw(Color.LimeGreen, DravenMenu.Slider(DravenMenu.Axes, "Range"), Player.Instance.Position);
                 }

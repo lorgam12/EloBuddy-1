@@ -48,7 +48,7 @@ namespace Hextech_Annie
                 {
                     case 0:
 
-                        foreach(var Enemy in EntityManager.Heroes.Enemies.Where(x => x.Distance(Tibber.Position) <= 500 && x.IsValid && !x.IsDead))
+                        foreach(var Enemy in EntityManager.Heroes.Enemies.Where(x => x.Distance(Tibber.Position) <= 1100 && x.IsValid && !x.IsDead))
                         {
                             Player.IssueOrder(GameObjectOrder.MovePet, Enemy);
                         }
@@ -57,7 +57,7 @@ namespace Hextech_Annie
 
                     case 1:
 
-                        foreach(var Enemy in EntityManager.Heroes.Enemies.Where(x => x.Distance(Tibber.Position) <= 500 && x.IsValid && !x.IsDead).OrderBy(x => x.Health))
+                        foreach(var Enemy in EntityManager.Heroes.Enemies.Where(x => x.Distance(Tibber.Position) <= 1100 && x.IsValid && !x.IsDead).OrderBy(x => x.Health))
                         {
                             Player.IssueOrder(GameObjectOrder.MovePet, Enemy);
                         }

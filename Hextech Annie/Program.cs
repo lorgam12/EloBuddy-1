@@ -25,13 +25,13 @@ namespace Hextech_Annie
         {
             if (Player.Instance.Hero != Champion.Annie)
                 return;
-
+	
             AnnieMenu.Init();
             Annie.Init();
-            Drawing.OnDraw += Drawing_OnDraw;
-        }
-
-        private static void Drawing_OnDraw(EventArgs args)
+			Drawing.OnDraw += Drawing_OnDraw;
+		}
+		
+		private static void Drawing_OnDraw(EventArgs args)
         {
             if (Annie.Q.IsReady() && AnnieMenu.CheckBox(AnnieMenu.Draw, "Q"))
             {

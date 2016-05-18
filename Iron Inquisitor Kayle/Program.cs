@@ -28,7 +28,7 @@ namespace Iron_Inquisitor_Kayle
 
             KayleMenu.Init();
             Kayle.Init();
-            Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnDraw += Drawing_OnDraw;			
         }
 
         private static void Drawing_OnDraw(EventArgs args)
