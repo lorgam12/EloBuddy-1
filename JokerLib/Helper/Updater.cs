@@ -27,7 +27,7 @@ namespace JokerLib.Helper
 
         public static void CheckLibraryUpdates()
         {
-            string RawVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/DownsecAkr/JokerLib/master/" + Assembly.GetExecutingAssembly().GetName().Name + "/Properties/AssemblyInfo.cs");
+            string RawVersion = new WebClient().DownloadString("https://raw.githubusercontent.com/DownsecAkr/EloBuddy/master/" + Assembly.GetExecutingAssembly().GetName().Name + "/Properties/AssemblyInfo.cs");
             var Try = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match(RawVersion);
             if (Try.Success)
             {
