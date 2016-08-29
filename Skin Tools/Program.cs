@@ -32,6 +32,7 @@ namespace Skin_Tools
                     {
                         Player.Instance.SetSkinId(Slider(Principal, "ID"));
                     }
+
                 };
             };
         }
