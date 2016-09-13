@@ -10,3 +10,6 @@ C:\Users\Lawiet\Documents\GitHub\EloBuddy\Hextech Annie\bin\Debug\EloBuddy.Sandb
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Hextech Annie\obj\Debug\Hextech Annie.csprojResolveAssemblyReference.cache
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Hextech Annie\obj\Debug\Hextech Annie.exe
 C:\Users\Lawiet\Documents\GitHub\EloBuddy\Hextech Annie\obj\Debug\Hextech Annie.pdb
+C:\Github\EloBuddy\Hextech Annie\bin\Debug\Hextech Annie.exe.config
+C:\Github\EloBuddy\Hextech Annie\obj\Debug\Hextech Annie.exe
+C:\Github\EloBuddy\Hextech Annie\obj\Debug\Hextech Annie.pdb

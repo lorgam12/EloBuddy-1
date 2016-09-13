@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Linq;
 using EloBuddy;
+using EloBuddy.SDK;
+using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Menu;
+using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using SharpDX;
 
@@ -8,72 +13,62 @@ namespace Championship_Riven
 {
     class Program
     {
-        public static Text Status;
-
         static void Main(string[] args)
         {
-            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
-        }
-
-        private static void Loading_OnLoadingComplete(EventArgs args)
-        {
-            if (Player.Instance.ChampionName != "Riven")
-                return;
-
-            RivenMenu.Load();
-            Riven.Load();
-            Drawing.OnDraw += Drawing_OnDraw;
-        }
-
-        private static void Drawing_OnDraw(EventArgs args)
-        {
-            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawOFF"))
-                return;
-
-            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawQ"))
+            Loading.OnLoadingComplete += delegate
             {
-                if (Riven.Q.IsReady())
+                if (Player.Instance.Hero != Champion.Riven)
+                    return;
+
+                if (Extensions.CheckLicense())
                 {
-                    Circle.Draw(Color.DarkBlue, Riven.Q.Range, Player.Instance.Position);
+                    Chat.Print("[Beta Status] - Open");
                 }
-            }
-
-            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawW"))
-            {
-                if (Riven.W.IsReady())
+                else
                 {
-                    Circle.Draw(Color.DarkBlue, Riven.W.Range, Player.Instance.Position);
+                    Chat.Print("[Beta Status] - Closed");
+                    return;
                 }
-            }
 
-            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawE"))
-            {
-                if (Riven.E.IsReady())
+                Riven.LoadModules();
+
+                Drawing.OnDraw += delegate
                 {
-                    Circle.Draw(Color.DarkBlue, Riven.E.Range, Player.Instance.Position);
-                }
-            }
+                    if (Menu.CheckBox(Menu.Draw, "Disable"))
+                        return;
 
-            if (RivenMenu.CheckBox(RivenMenu.Draw, "DrawR"))
-            {
-                if (Riven.R.IsReady())
-                {
-                    Circle.Draw(Color.DarkBlue, Riven.R2.Range, Player.Instance.Position);
-                }
-            }
+                    if (Menu.CheckBox(Menu.Draw, "Status"))
+                    {
+                        Drawing.DrawText(Drawing.WorldToScreen(Player.Instance.Position).X - 40, Drawing.WorldToScreen(Player.Instance.Position).Y + 20, System.Drawing.Color.White, "ForceR");
+                        Drawing.DrawText(Drawing.WorldToScreen(Player.Instance.Position).X + 12, Drawing.WorldToScreen(Player.Instance.Position).Y + 20, Menu.Keybind(Menu.R, "Force") ? System.Drawing.Color.LimeGreen : System.Drawing.Color.Red, Menu.Keybind(Menu.R, "Force") ? "(On)" : "(Off)");
+                    }
 
-            if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
-            {
-                if (Riven.FocusTarget != null)
-                {
-                    Circle.Draw(Color.DarkBlue, 150, Riven.FocusTarget.Position);
-                }
-            }
+                    if (Menu.CheckBox(Menu.Draw, "Burst"))
+                    {
+                        Drawing.DrawCircle(Player.Instance.Position, Extensions.E.Range + Extensions.Flash.Range, System.Drawing.Color.Red);
+                    }
 
-            if(RivenMenu.Keybind(RivenMenu.Burst, "BurstAllowed"))
-            {
-                Circle.Draw(Color.Red, 800, Player.Instance.Position);
-            }
+                    if (Menu.CheckBox(Menu.Draw, "Q") && Extensions.Q.IsReady())
+                    {
+                        Drawing.DrawCircle(Player.Instance.Position, Extensions.RealQ(), System.Drawing.Color.CadetBlue);
+                    }
+
+                    if (Menu.CheckBox(Menu.Draw, "W") && Extensions.W.IsReady())
+                    {
+                        Drawing.DrawCircle(Player.Instance.Position, Extensions.RealW(), System.Drawing.Color.CadetBlue);
+                    }
+
+                    if (Menu.CheckBox(Menu.Draw, "E") && Extensions.E.IsReady())
+                    {
+                        Drawing.DrawCircle(Player.Instance.Position, Extensions.E.Range, System.Drawing.Color.CadetBlue);
+                    }
+
+                    if (Menu.CheckBox(Menu.Draw, "R") && Extensions.R.IsReady())
+                    {
+                        Drawing.DrawCircle(Player.Instance.Position, Extensions.R2.Range, System.Drawing.Color.CadetBlue);
+                    }
+                };
+            };
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Hextech_Annie
         public static void Init()
         {
             Q = new Spell.Targeted(SpellSlot.Q, 625);
-            W = new Spell.Skillshot(SpellSlot.W, 550, SkillShotType.Cone, 250, int.MaxValue, 80);
+            W = new Spell.Skillshot(SpellSlot.W, 550, SkillShotType.Cone, 250, int.MaxValue, 250);
             E = new Spell.Active(SpellSlot.E);
             R = new Spell.Skillshot(SpellSlot.R, 600, SkillShotType.Circular, 200, int.MaxValue, 250);
 
